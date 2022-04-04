@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^3.11.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
+    "moment": "^2.29.1",
+    "prisma": "^3.11.1",
+    "sh": "github:malikkurosaki/sh"
+  },
+  "description": ""
+}
