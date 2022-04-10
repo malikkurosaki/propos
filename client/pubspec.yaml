@@ -42,6 +42,9 @@ dependencies:
   flutter_easyloading: ^3.0.3
   http: 
   sticky_grid_view: ^1.0.3
+  cached_network_image: ^3.2.0
+  flutter_grid_button: ^2.0.0
+  fluid_kit: ^2.1.0
 
 dev_dependencies:
   flutter_test:
