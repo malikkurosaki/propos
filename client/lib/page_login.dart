@@ -24,13 +24,21 @@ class PageLogin extends StatelessWidget {
                     Flexible(
                       child: ListView(
                         children: [
-                          Container(
-                            height: 300,
-                            child: CachedNetworkImage(
-                              imageUrl: "https://i.postimg.cc/d3FjrZsF/image.png",
-                              placeholder: (a, b) => Icon(Icons.image_search_rounded),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              "assets/images/image1.png",
+                              fit: BoxFit.scaleDown,
+                              height: 200,
                             ),
                           ),
+                          // Container(
+                          //   height: 300,
+                          //   child: CachedNetworkImage(
+                          //     imageUrl: "https://i.postimg.cc/d3FjrZsF/image.png",
+                          //     placeholder: (a, b) => Icon(Icons.image_search_rounded),
+                          //   ),
+                          // ),
                       
                           ListTile(
                             title: Text("SIGNIN",
@@ -82,7 +90,7 @@ class PageLogin extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
-
+                    
                           Column(
                             children: [
                               Container(
@@ -113,7 +121,7 @@ class PageLogin extends StatelessWidget {
                       title: MaterialButton(
                         color: Colors.cyan[700],
                         onPressed: () {
-                          UtilRoutes.home().go();
+                          UtilRoutes.home().goOff();
                         },
                         child: Container(
                           width: double.infinity,

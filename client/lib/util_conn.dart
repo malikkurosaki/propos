@@ -19,17 +19,15 @@ final listMenuItem = <Map<String, dynamic>>[
   },
 ];
 
-class UtilConn extends GetConnect{
-  
-  Future<void> loadMenuItem()async{
-     final result = <Map<String, dynamic>>[];
+class UtilConn extends GetConnect {
+  Future<void> loadMenuItem() async {
+    final result = [];
     for (var item in listMenuItem) {
       var response = await http.get(Uri.parse(item["data"].toString()));
-      result.add({
-        "category": item["category"].toString(),
-        "data": json.decode(response.body),
-      });
+      for (var item in json.decode(response.body)) {
+        result.add(item);
+      }
     }
-    UtilPref.listMenuSet(result);
+    UtilPref.listMenuSet([...result]);
   }
 }

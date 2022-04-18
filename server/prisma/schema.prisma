@@ -9,3 +9,78 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  id       String    @id @default(uuid())
+  name     String
+  email    String    @unique
+  password String
+  Outlets  Outlets[]
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
+  deleteAt DateTime  @default(now())
+}
+
+model Profile {
+  id        String @id @default(uuid())
+  fitstName String
+  lastName  String
+  address   String
+  phone     String
+  image     String
+}
+
+model Outlets {
+  id         String       @id @default(uuid())
+  name       String
+  Categories Categories[]
+  user       Users        @relation(fields: [usersId], references: [id])
+  usersId    String
+  createAt   DateTime     @default(now())
+  updateAt   DateTime     @updatedAt
+  deleteAt   DateTime     @default(now())
+}
+
+model Categories {
+  id        String     @id @default(uuid())
+  name      String
+  Products  Products[]
+  outlet    Outlets    @relation(fields: [outletsId], references: [id])
+  outletsId String
+  createAt  DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
+  deleteAt  DateTime   @default(now())
+}
+
+model Products {
+  id           String     @id @default(uuid())
+  name         String
+  price        Int
+  category     Categories @relation(fields: [categoriesId], references: [id])
+  categoriesId String
+  createAt     DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  deleteAt     DateTime   @default(now())
+  Bills        Bills[]
+}
+
+model Lisbill {
+  id       String   @id @default(uuid())
+  noBill   String   @unique
+  bill     Bills    @relation(fields: [billsId], references: [id])
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  deleteAt DateTime @default(now())
+  billsId  String
+}
+
+model Bills {
+  id         String    @id @default(uuid())
+  nobill     String
+  ptoduct    Products  @relation(fields: [productsId], references: [id])
+  productsId String
+  createAt   DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
+  deleteAt   DateTime  @default(now())
+  Lisbill    Lisbill[]
+}

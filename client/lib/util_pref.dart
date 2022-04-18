@@ -1,5 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class UtilPref {
   static final storage = GetStorage();
@@ -12,11 +13,25 @@ class UtilPref {
   static final lastClick = Map.from(storage.read('lastclick') ?? {}).obs;
   static final listFavorite = List<Map<String, dynamic>>.from(storage.read('listFavorite') ?? []).obs;
   static final showFavorite = ((storage.read('showFavorite') ?? false).toString() == "true").obs;
+  static final billId = (storage.read('billId') ??
+          () {
+            final id = Uuid().v4();
+            storage.write('billId', id);
+            return id;
+          }())
+      .toString()
+      .obs;
 
   static wellcomeSet(bool value) {
     wellcome.value = value.toString();
     storage.write('wellcome', value);
   }
+
+  static final bills = List<Map<String, dynamic>>.from(storage.read('bills') ?? []).obs;
+  static final listBill = List<Map<String, dynamic>>.from(storage.read('listBill') ?? []).obs;
+  static final isCategoryOpen = (storage.read('isCategoryOpen') ?? true).toString().obs;
+  static final pax = int.parse((storage.read('pax') ?? 1).toString()).obs;
+  static final aspek = double.parse((storage.read('aspek') ?? 10 / 16).toString()).obs;
 
   static userSet(Map<String, dynamic> value) async {
     user.value = value;
@@ -56,5 +71,41 @@ class UtilPref {
   static showFavoriteSet(bool value) async {
     showFavorite.value = value;
     storage.write('showFavorite', value);
+  }
+
+  static billIdSet(String value) async {
+    if (value == "") {
+      final id = Uuid().v4();
+      storage.write('billId', id);
+    } else {
+      storage.write('billId', value);
+    }
+
+    billId.value = storage.read('billId');
+  }
+
+  static billsSet(List<Map<String, dynamic>> value) async {
+    bills.value = value;
+    storage.write('bills', value);
+  }
+
+  static listBillSet(List<Map<String, dynamic>> value) async {
+    listBill.value = value;
+    storage.write('listBill', value);
+  }
+
+  static isCategoryOpenSet(bool value) async {
+    isCategoryOpen.value = value.toString();
+    storage.write('isCategoryOpen', value);
+  }
+
+  static paxSet(int value) async {
+    pax.value = value;
+    storage.write('pax', value);
+  }
+
+  static aspekSet(double value) async {
+    aspek.value = value;
+    storage.write('aspek', value);
   }
 }
