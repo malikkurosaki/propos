@@ -10,6 +10,8 @@ import 'page_register.dart';
 import 'page_wellcome.dart';
 import 'package:get/get.dart';
 
+import 'transaction_page.dart';
+
 class UtilRoutes {
   late String key;
 
@@ -22,6 +24,7 @@ class UtilRoutes {
   UtilRoutes.wellcome() : key = '/wellcome';
   UtilRoutes.cashier() : key = '/cashier';
   UtilRoutes.cashierPayment() : key = '/cashierPayment';
+  UtilRoutes.transaction() : key = '/transaction';
 
   static final listPage = <GetPage>[
     GetPage(name: UtilRoutes.root().key, page: () => PageRoot()),
@@ -33,6 +36,7 @@ class UtilRoutes {
     GetPage(name: UtilRoutes.wellcome().key, page: () => PageWellcome()),
     GetPage(name: UtilRoutes.cashier().key, page: () => CashierPage()),
     GetPage(name: UtilRoutes.cashierPayment().key, page: () => CashierPagePayment()),
+    GetPage(name: UtilRoutes.transaction().key, page: () => TransactionPage()),
   ];
 
   go() => Get.toNamed(key);

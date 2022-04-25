@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:client/cashier_page_saved_order.dart';
 import 'package:client/cashier_sub_main.dart';
 import 'package:client/cashier_sub_order.dart';
 import 'package:client/util_conn.dart';
@@ -11,6 +13,7 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:animate_do/animate_do.dart' as anido;
 
 // final lastClick = <String, dynamic>{}.obs;
 
@@ -18,9 +21,7 @@ class CashierPage extends StatelessWidget {
   const CashierPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    onLoad();
-
-    onLoad();
+    // onLoad();
     return KeyboardDismisser(
       child: Material(
         child: ResponsiveBuilder(
@@ -30,23 +31,33 @@ class CashierPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     color: Colors.white,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            UtilRoutes.home().go();
-                          },
-                        ),
-                        Expanded(
-                          child: Text(
-                            "Cashier",
-                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
+                        CircleAvatar(
+                          backgroundColor: Colors.orange,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              UtilRoutes.home().go();
+                            },
                           ),
                         ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Cashier",
+                              style: TextStyle(fontSize: 36),
+                            ),
+                          ),
+                        ),
+                        CashierPageSavedOrder()
                       ],
                     ),
                   ),
@@ -67,7 +78,13 @@ class CashierPage extends StatelessWidget {
                           ),
                         ),
                         Center(
-                            child: ConstrainedBox(constraints: BoxConstraints(maxWidth: 500), child: CashierSubOrder()))
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: 420,
+                            ),
+                            child: CashierSubOrder(),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -80,7 +97,7 @@ class CashierPage extends StatelessWidget {
     );
   }
 
-  onLoad() async {
-    UtilPref.billIdSet("");
-  }
+  // onLoad() async {
+  //   UtilPref.billIdSet(value: "");
+  // }
 }

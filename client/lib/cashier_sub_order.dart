@@ -1,477 +1,301 @@
+import 'dart:convert';
+
 import 'package:client/cashier_sub_main.dart';
 import 'package:client/cashier_page_payment.dart';
+import 'package:client/cashier_sub_order_item.dart';
+import 'package:client/cashier_sub_order_option_panel.dart';
 import 'package:client/util_routers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:uuid/uuid.dart';
 import 'util_pref.dart';
+import 'package:animate_do/animate_do.dart' as anido;
 
 class CashierSubOrder extends GetWidget {
-  const CashierSubOrder({Key? key}) : super(key: key);
+  CashierSubOrder({Key? key}) : super(key: key);
+  final nameSaveOrder = "".obs;
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Column(
         children: [
-          Container(
-            color: Colors.grey[100],
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Obx(() => Text(
-                        "Rp. ${UtilPref.listorder.fold(0, (previousValue, element) => int.parse(previousValue!.toString()) + (int.parse(element['price'].toString().replaceAll(".", "")) * element['qty']))}",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ),
-                Visibility(
-                  visible: sizingInformation.isMobile,
-                  child: IconButton(
-                      onPressed: () {
-                        Get.dialog(Material(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    BackButton(),
-                                  ],
-                                ),
-                              ),
-                              Flexible(child: CashierSubMain())
-                            ],
-                          ),
-                        ));
-                      },
-                      icon: Icon(
-                        Icons.post_add_rounded,
-                        color: Colors.purple,
-                      )),
-                ),
-                PopupMenuButton(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Colors.purple,
+          Obx(
+            () => Container(
+              color: Colors.brown[100],
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => Text(
+                          NumberFormat.simpleCurrency(locale: "id_ID")
+                              .format(UtilPref.listorder.fold(
+                                  0,
+                                  (previousValue, element) =>
+                                      int.parse(previousValue!.toString()) +
+                                      (int.parse(element['price'].toString().replaceAll(".", "")) * element['qty'])))
+                              .replaceAll(",00", "")
+                              .replaceAll("Rp", ""),
+                          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.brown),
+                        )),
                   ),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: Text("Save"),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                      child: Text("Cancel"),
-                      value: 2,
-                    ),
-                  ],
-                  onSelected: (value) {
-                    if (value == 1) {
-                      Get.dialog(
-                        AlertDialog(
-                          backgroundColor: Colors.teal,
-                          title: Text(
-                            "Save",
-                            style: TextStyle(
-                              color: Colors.white,
+                  Visibility(
+                    visible: sizingInformation.isMobile,
+                    child: IconButton(
+                        onPressed: () {
+                          Get.dialog(Material(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.orange,
+                                        child: BackButton(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Flexible(child: CashierSubMain())
+                              ],
                             ),
-                          ),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                  "Are you sure to save this order?",
+                          ));
+                        },
+                        icon: Icon(
+                          Icons.post_add_rounded,
+                          color: Colors.purple,
+                        )),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                        onPressed: () {
+
+                          if (UtilPref.listorder.isEmpty) {
+                            EasyLoading.showToast("Your order is empty");
+                            return;
+                          }
+
+                          if (UtilPref.savedOrder.isNotEmpty) {
+                            final index = UtilPref.listSaveOrder
+                                .indexWhere((element) => element['id'] == UtilPref.savedOrder['id']);
+
+                            // final data = {
+                            //   "id": Uuid().v4(),
+                            //   "name": nameSaveOrder.value,
+                            //   "order": List.from(UtilPref.listorder),
+                            //   "pax": UtilPref.pax.value,
+                            //   "customer": Map.from(UtilPref.customer),
+                            //   "date": DateTime.now().toString()
+                            // };
+
+                            UtilPref.savedOrder["order"] = List.from(UtilPref.listorder);
+                            UtilPref.savedOrder["pax"] = UtilPref.pax.value;
+                            UtilPref.savedOrder["customer"] = Map.from(UtilPref.customer);
+                            UtilPref.listSaveOrder[index] = Map.from(UtilPref.savedOrder);
+                            UtilPref.listSaveOrderSet(value: List.from(UtilPref.listSaveOrder));
+
+                            EasyLoading.showToast("data updated");
+                            return;
+                          }
+
+                          Get.dialog(
+                            anido.ElasticIn(
+                              child: AlertDialog(
+                                backgroundColor: Colors.teal,
+                                title: Text(
+                                  "Save",
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    fillColor: Colors.teal[100],
-                                    filled: true,
-                                    labelText: "Order Name",
-                                  ),
-                                  controller: TextEditingController(
-                                      text: UtilPref.listorder.isNotEmpty ? UtilPref.listorder[0]['name'] : ""),
-                                ),
-                              )
-                            ],
-                          ),
-                          actions: [
-                            MaterialButton(
-                              color: Colors.teal[800],
-                              child: Text(
-                                "Yes",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () {},
-                            ),
-                            MaterialButton(
-                              color: Colors.teal[300],
-                              child: Text(
-                                "No",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-
-                    }
-                  },
-                ),
-               
-                IconButton(
-                  onPressed: () {
-                    // delete all item
-                    Get.dialog(
-                      AlertDialog(
-                        backgroundColor: Colors.red,
-                        title: Text(
-                          "Delete All",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        content: Text(
-                          "Mau Menghapus Semuanya ?",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        actions: [
-                          MaterialButton(
-                              color: Colors.red[800],
-                              child: Text(
-                                "Ya",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () {
-                                UtilPref.listorderSet([]);
-                                Get.back();
-                              }),
-                          MaterialButton(
-                            color: Colors.red[300],
-                            child: Text(
-                              "Tidak",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  icon: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Tooltip(
-                      message: "Delete All",
-                      child: Icon(
-                        Icons.delete_forever,
-                        color: Colors.red[300],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            child: Obx(
-              () => ListView(
-                physics: BouncingScrollPhysics(),
-                controller: ScrollController(
-                  keepScrollOffset: true,
-                ),
-                children: [
-                  Tooltip(
-                    message: "Show Order Options",
-                    child: ExpansionTile(
-                      iconColor: Colors.green,
-                      textColor: Colors.green,
-                      collapsedBackgroundColor: Colors.green[100],
-                      backgroundColor: Colors.green[200],
-                      title: Text("Order Options",
-                        style: TextStyle(
-                          fontSize: 16
-                        ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.account_circle),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text("PAX COUNT"),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            MaterialButton(
-                              color: Colors.green[100],
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(fontSize: 24),
-                                ),
-                                onPressed: () {
-                                  UtilPref.paxSet((UtilPref.pax.value+1));
-                                }),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text(
-                                UtilPref.pax.value.toString(),
-                                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            MaterialButton(
-                              color: Colors.green[100],
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(fontSize: 24),
-                                ),
-                                onPressed: () {
-                                   if(UtilPref.pax.value > 1){
-                                     UtilPref.paxSet((UtilPref.pax.value -1));
-                                   }
-                                })
-                          ],
-                        ),
-                        // ListTile(
-                        //   leading: Icon(
-                        //     Icons.dashboard_customize,
-                        //     color: Colors.brown,
-                        //   ),
-                        //   title: TextFormField(
-                        //     decoration: InputDecoration(
-                        //       border: OutlineInputBorder(
-                        //         borderRadius: BorderRadius.circular(50),
-                        //         borderSide: BorderSide(
-                        //           color: Colors.brown,
-                        //         ),
-                        //       ),
-                        //       enabledBorder: OutlineInputBorder(
-                        //         borderRadius: BorderRadius.circular(50),
-                        //         borderSide: BorderSide(
-                        //           color: Colors.transparent,
-                        //         ),
-                        //       ),
-                        //       fillColor: Colors.brown[100],
-                        //       filled: true,
-                        //       labelText: "PAX",
-                        //     ),
-                        //     controller: TextEditingController(
-                        //         text: UtilPref.listorder.isNotEmpty ? UtilPref.listorder[0]['name'] : ""),
-                        //   ),
-                        //   onTap: () {},
-                        // ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Card(
-                          elevation: 0,
-                          color: Colors.green[50],
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.people,
-                              color: Colors.green,
-                            ),
-                            title: Text(
-                              "Customer",
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            onTap: () {},
-                            trailing: Icon(Icons.arrow_drop_down_circle_rounded, color: Colors.green),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  for (var item in UtilPref.listorder)
-                    Card(
-                      elevation: UtilPref.lastClick['title'] == item['title'] ? 4 : 0,
-                      color: UtilPref.lastClick['title'] == item['title'] ? Colors.cyan[100] : Colors.pink[50],
-                      child: Tooltip(
-                        message: "long press to add some note\nsingle tap to add some quantity",
-                        child: ListTile(
-                          onLongPress: () {
-                            Get.dialog(
-                              AlertDialog(
-                                backgroundColor: Colors.green[100],
-                                title: Text("Add Some Note"),
-                                content: TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: "Note",
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(28),
-                                        borderSide: BorderSide(color: Colors.transparent)),
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(28)),
-                                  ),
-                                  controller: TextEditingController(text: item['note']),
-                                  onChanged: (value) {
-                                    item['note'] = value;
-                                    UtilPref.listorderSet(List.from(UtilPref.listorder));
-                                  },
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Text(
+                                        "Are you sure to save this order?",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: TextFormField(
+                                        onChanged: (value) => nameSaveOrder.value = value,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          fillColor: Colors.teal[100],
+                                          filled: true,
+                                          labelText: "Order Name",
+                                        ),
+                                        controller: TextEditingController(
+                                            text: UtilPref.listorder.isNotEmpty ? UtilPref.listorder[0]['name'] : ""),
+                                      ),
+                                    )
+                                  ],
                                 ),
                                 actions: [
                                   MaterialButton(
-                                    child: Text("Clear"),
+                                    color: Colors.teal[800],
+                                    child: Text(
+                                      "Yes",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                     onPressed: () {
-                                      item['note'] = "";
-                                      UtilPref.listorderSet(List.from(UtilPref.listorder));
+                                      // check is empty name
+                                      if (nameSaveOrder.value.isEmpty) {
+                                        EasyLoading.showError("Please fill order name");
+                                        return;
+                                      }
+
+                                      // check duplicate name
+                                      if (UtilPref.listSaveOrder
+                                          .any((element) => element['name'] == nameSaveOrder.value)) {
+                                        EasyLoading.showError("Order name already exist");
+                                        return;
+                                      }
+
+                                      if (UtilPref.listorder.isEmpty) {
+                                        EasyLoading.showError("Please add order");
+                                        return;
+                                      }
+
+                                      final data = {
+                                        "id": Uuid().v4(),
+                                        "name": nameSaveOrder.value,
+                                        "order": List.from(UtilPref.listorder),
+                                        "pax": UtilPref.pax.value,
+                                        "customer": Map.from(UtilPref.customer),
+                                        "date": DateTime.now().toString()
+                                      };
+
+                                      EasyLoading.show(status: "Saving...");
+                                      UtilPref.listSaveOrder.add(data);
+                                      UtilPref.listSaveOrderSet();
+                                      UtilPref.listorderSet(value: []);
+                                      EasyLoading.showSuccess("Save order success");
+
                                       Get.back();
                                     },
                                   ),
                                   MaterialButton(
-                                    child: Text("OK"),
+                                    color: Colors.teal[300],
+                                    child: Text(
+                                      "No",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                     onPressed: () {
+                                      EasyLoading.showToast("Baek lah, ga jadi ...");
                                       Get.back();
                                     },
                                   ),
                                 ],
                               ),
-                            );
-                          },
-                          onTap: () {
-                            // add qty
-                            final idx = UtilPref.listorder.indexWhere((element) => element['title'] == item['title']);
-                            if (idx == -1) {
-                              item['qty'] = 1;
-                              item['note'] = "";
-                              UtilPref.listorder.add(item);
-                            } else {
-                              UtilPref.listorder[idx]['qty'] = UtilPref.listorder[idx]['qty'] + 1;
-                            }
+                            ),
+                          );
+                        },
+                        icon: Icon(UtilPref.savedOrder.isEmpty ? Icons.save : Icons.update, color: Colors.cyan)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        onPressed: () {
+                          if (UtilPref.listorder.isEmpty) {
+                            EasyLoading.showToast("Your order is empty");
+                            return;
+                          }
 
-                            UtilPref.lastClick.value = item;
-                            UtilPref.listorderSet(List.from(UtilPref.listorder));
-                          },
-                          leading: Tooltip(
-                            message: "Add Some Quantity",
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Text(
-                                item["qty"].toString(),
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.cyan),
+                          // delete all item
+                          Get.dialog(
+                            anido.ElasticIn(
+                              child: AlertDialog(
+                                backgroundColor: Colors.red,
+                                title: Text(
+                                  "Delete All",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: Text(
+                                  "Mau Menghapus Semuanya ?",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                actions: [
+                                  MaterialButton(
+                                      color: Colors.red[800],
+                                      child: Text(
+                                        "Ya",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        UtilPref.listorderSet(value: []);
+                                        UtilPref.savedOrderSet(value: {});
+                                        UtilPref.paxSet(value: 1);
+                                        UtilPref.customerSet(value: {});
+                                        
+                                        Get.back();
+                                      }),
+                                  MaterialButton(
+                                    color: Colors.red[300],
+                                    child: Text(
+                                      "Tidak",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          title: Text(
-                            item["title"].toString(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              // color: UtilPref.listorder
-                              //         .map((element) => element['title'].toString())
-                              //         .toList()
-                              //         .contains(item["title"].toString())
-                              //     ? UtilPref.lastClick['title'] == item["title"].toString()
-                              //         ? Colors.white
-                              //         : Colors.black
-                              //     : Colors.black,
-                            ),
-                          ),
-                          isThreeLine: true,
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Rp. " + item["price"].toString()),
-                              Visibility(
-                                visible: item["note"].toString() != "",
-                                child: Container(
-                                    margin: EdgeInsets.only(top: 8),
-                                    padding: EdgeInsets.only(bottom: 4, left: 16, right: 16, top: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.pink[100],
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(item["note"].toString())),
-                              )
-                            ],
-                          ),
-                          trailing: Tooltip(
-                            message: "Reduce Some Quantity",
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: InkWell(
-                                onTap: () {
-                                  // reduce qty
-                                  final idx =
-                                      UtilPref.listorder.indexWhere((element) => element['title'] == item['title']);
-                                  if (item['qty'] > 1) {
-                                    UtilPref.listorder[idx]['qty'] = UtilPref.listorder[idx]['qty'] - 1;
-                                  } else {
-                                    UtilPref.listorder.removeWhere((element) => element['title'] == item['title']);
-                                  }
-
-                                  UtilPref.lastClick.value = item;
-                                  UtilPref.listorderSet(List.from(UtilPref.listorder));
-                                },
-                                onLongPress: () {
-                                  // delete item dialog
-                                  Get.dialog(
-                                    AlertDialog(
-                                      title: Text("Delete Item"),
-                                      content: Text("Are you sure want to delete this item?"),
-                                      actions: [
-                                        MaterialButton(
-                                          child: Text("Cancel"),
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                        ),
-                                        MaterialButton(
-                                          child: Text("Delete"),
-                                          onPressed: () {
-                                            UtilPref.listorder
-                                                .removeWhere((element) => element['title'] == item['title']);
-                                            UtilPref.listorderSet(List.from(UtilPref.listorder));
-                                            Get.back();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                child: Icon(Icons.remove, color: Colors.red[200]),
-                              ),
-                            ),
+                          );
+                        },
+                        icon: Tooltip(
+                          message: "Delete All",
+                          child: Icon(
+                            Icons.delete_forever,
+                            color: Colors.red[300],
                           ),
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
+            ),
+          ),
+          CashierSubOrderOptionPanel(),
+          Flexible(
+            child: Obx(
+              () => ListView.builder(
+                  controller: ScrollController(),
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final item = UtilPref.listorder[index];
+                    return CashierSubOrderItem(item: item);
+                  },
+                  itemCount: UtilPref.listorder.length),
             ),
           ),
           Card(

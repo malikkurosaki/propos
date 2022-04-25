@@ -13,15 +13,7 @@ class UtilPref {
   static final lastClick = Map.from(storage.read('lastclick') ?? {}).obs;
   static final listFavorite = List<Map<String, dynamic>>.from(storage.read('listFavorite') ?? []).obs;
   static final showFavorite = ((storage.read('showFavorite') ?? false).toString() == "true").obs;
-  static final billId = (storage.read('billId') ??
-          () {
-            final id = Uuid().v4();
-            storage.write('billId', id);
-            return id;
-          }())
-      .toString()
-      .obs;
-
+  static final billId = (storage.read('billId') ?? Uuid().v4()).toString().obs;
   static wellcomeSet(bool value) {
     wellcome.value = value.toString();
     storage.write('wellcome', value);
@@ -32,80 +24,180 @@ class UtilPref {
   static final isCategoryOpen = (storage.read('isCategoryOpen') ?? true).toString().obs;
   static final pax = int.parse((storage.read('pax') ?? 1).toString()).obs;
   static final aspek = double.parse((storage.read('aspek') ?? 10 / 16).toString()).obs;
+  static final listHistorySearch = List<Map<String, dynamic>>.from(storage.read('listHistorySearch') ?? []).obs;
+  static final listSaveOrder = List<Map<String, dynamic>>.from(storage.read('listSaveOrder') ?? []).obs;
+  static final customer = Map.from(storage.read('customer') ?? {}).obs;
+  static final listCustomer = List.from(storage.read("listCustomer") ?? []).obs;
+  static final savedOrder = Map.from(storage.read('savedOrder') ?? {}).obs;
 
-  static userSet(Map<String, dynamic> value) async {
-    user.value = value;
-    storage.write('user', value);
-  }
-
-  static listMenuSet(List<Map<String, dynamic>> value) async {
-    storage.write('listMenu', value);
-    listMenu.value = value;
-  }
-
-  static isGridSet(bool value) async {
-    isGrid.value = value.toString();
-    storage.write('isGrid', value);
-  }
-
-  static listorderSet(List<Map<String, dynamic>> value) async {
-    listorder.value = value;
-    storage.write('listorder', value);
-  }
-
-  static searchSet(String value) async {
-    search.value = value;
-    storage.write('search', value);
-  }
-
-  static lastClickSet(Map value) async {
-    lastClick.value = value;
-    storage.write('lastClick', value);
-  }
-
-  static listFavoriteSet(List<Map<String, dynamic>> value) async {
-    listFavorite.value = value;
-    storage.write('listFavorite', value);
-  }
-
-  static showFavoriteSet(bool value) async {
-    showFavorite.value = value;
-    storage.write('showFavorite', value);
-  }
-
-  static billIdSet(String value) async {
-    if (value == "") {
-      final id = Uuid().v4();
-      storage.write('billId', id);
+  static userSet({Map<String, dynamic>? value}) async {
+    if (value != null) {
+      user.value = value;
+      storage.write('user', value);
     } else {
-      storage.write('billId', value);
+      storage.write('user', Map.from(user));
     }
-
-    billId.value = storage.read('billId');
   }
 
-  static billsSet(List<Map<String, dynamic>> value) async {
-    bills.value = value;
-    storage.write('bills', value);
+  static listMenuSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listMenu.value = value;
+      storage.write('listMenu', value);
+    } else {
+      storage.write('listMenu', List.from(listMenu));
+    }
   }
 
-  static listBillSet(List<Map<String, dynamic>> value) async {
-    listBill.value = value;
-    storage.write('listBill', value);
+  static isGridSet({bool? value}) async {
+    if (value != null) {
+      isGrid.value = value.toString();
+      storage.write('isGrid', value);
+    } else {
+      storage.write('isGrid', isGrid.value);
+    }
   }
 
-  static isCategoryOpenSet(bool value) async {
-    isCategoryOpen.value = value.toString();
-    storage.write('isCategoryOpen', value);
+  static listorderSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listorder.value = value;
+      storage.write('listorder', value);
+    } else {
+      storage.write('listorder', List.from(listorder));
+    }
   }
 
-  static paxSet(int value) async {
-    pax.value = value;
-    storage.write('pax', value);
+  static searchSet({String? value}) async {
+    if (value != null) {
+      search.value = value;
+      storage.write('search', value);
+    } else {
+      storage.write('search', search.value);
+    }
   }
 
-  static aspekSet(double value) async {
-    aspek.value = value;
-    storage.write('aspek', value);
+  static lastClickSet({Map? value}) async {
+    if (value != null) {
+      lastClick.value = value;
+      storage.write('lastclick', value);
+    } else {
+      storage.write('lastclick', Map.from(lastClick));
+    }
+  }
+
+  static listFavoriteSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listFavorite.value = value;
+      storage.write('listFavorite', value);
+    } else {
+      storage.write('listFavorite', List.from(listFavorite));
+    }
+  }
+
+  static showFavoriteSet({bool? value}) async {
+    if (value != null) {
+      showFavorite.value = value;
+      storage.write('showFavorite', value);
+    } else {
+      storage.write('showFavorite', showFavorite.value);
+    }
+  }
+
+  static billIdSet({String? value}) async {
+    if(value != null){
+      billId.value = value;
+      storage.write('billId', value);
+    }else{
+      storage.write('billId', billId.value);
+    }
+  }
+
+  static billsSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      bills.value = value;
+      storage.write('bills', value);
+    } else {
+      storage.write('bills', List.from(bills));
+    }
+  }
+
+  static listBillSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listBill.value = value;
+      storage.write('listBill', value);
+    } else {
+      storage.write('listBill', List.from(listBill));
+    }
+  }
+
+  static isCategoryOpenSet({bool? value}) async {
+    if (value != null) {
+      isCategoryOpen.value = value.toString();
+      storage.write('isCategoryOpen', value);
+    } else {
+      storage.write('isCategoryOpen', isCategoryOpen.value);
+    }
+  }
+
+  static paxSet({int? value}) async {
+    if (value != null) {
+      pax.value = value;
+      storage.write('pax', value);
+    } else {
+      storage.write('pax', pax.value);
+    }
+  }
+
+  static aspekSet({double? value}) async {
+    if (value != null) {
+      aspek.value = value;
+      storage.write('aspek', value);
+    } else {
+      storage.write('aspek', aspek.value);
+    }
+  }
+
+  static listHistorySearchSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listHistorySearch.value = value;
+      storage.write('listHistorySearch', value);
+    } else {
+      storage.write('listHistorySearch', List.from(listHistorySearch));
+    }
+  }
+
+  static listSaveOrderSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listSaveOrder.value = value;
+      storage.write('listSaveOrder', value);
+    } else {
+      storage.write('listSaveOrder', List.from(listSaveOrder));
+    }
+  }
+
+  static customerSet({Map<String, dynamic>? value}) async {
+    if (value != null) {
+      customer.value = value;
+      storage.write('customer', value);
+    } else {
+      storage.write('customer', Map.from(customer));
+    }
+  }
+
+  static listCustomerSet({List<Map<String, dynamic>>? value}) async {
+    if (value != null) {
+      listCustomer.value = value;
+      storage.write('listCustomer', value);
+    } else {
+      storage.write('listCustomer', List.from(listCustomer));
+    }
+  }
+
+  static savedOrderSet({Map<String, dynamic>? value}) async {
+    if (value != null) {
+      savedOrder.value = value;
+      storage.write('savedOrder', value);
+    } else {
+      storage.write('savedOrder', Map.from(savedOrder));
+    }
   }
 }
