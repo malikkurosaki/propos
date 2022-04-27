@@ -2,26 +2,30 @@ import 'package:client/util_pref.dart';
 import 'package:client/util_routers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class PageRoot extends StatelessWidget {
   const PageRoot({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: SafeArea(
-          child: Center(
-        child: FutureBuilder(
-          future: onLoad(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Text("done");
-            } else {
-              return Text("loading");
-            }
-          },
-        ),
-      )),
+    return ResponsiveBuilder(
+      builder: (a, b) => Material(
+        color: Colors.cyan,
+        child: SafeArea(
+            child: Center(
+          child: FutureBuilder(
+            future: onLoad(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Text("done");
+              } else {
+                return Text("loading");
+              }
+            },
+          ),
+        )),
+      ),
     );
   }
 

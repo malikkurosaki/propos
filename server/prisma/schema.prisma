@@ -11,76 +11,132 @@ datasource db {
 }
 
 model Users {
-  id       String    @id @default(uuid())
-  name     String
-  email    String    @unique
-  password String
-  Outlets  Outlets[]
-  createAt DateTime  @default(now())
-  updateAt DateTime  @updatedAt
-  deleteAt DateTime  @default(now())
+  id        String     @id @default(cuid())
+  name      String
+  email     String
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Profiles  Profiles[]
+  Outlets   Outlets[]
+  ListBill  ListBill[]
 }
 
-model Profile {
-  id        String @id @default(uuid())
-  fitstName String
-  lastName  String
-  address   String
-  phone     String
-  image     String
+model Profiles {
+  id        String   @id @default(cuid())
+  firstName String?
+  lastName  String?
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  phone     String?
+  Users     Users?   @relation(fields: [usersId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  usersId   String?
+}
+
+model Roles {
+  id          String      @id @default(cuid())
+  name        String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  employeesId String?
+  Employees   Employees[]
+}
+
+model Employees {
+  id        String   @id @default(cuid())
+  name      String
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  phone     String?
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Roles     Roles?   @relation(fields: [rolesId], references: [id])
+  rolesId   String?
 }
 
 model Outlets {
-  id         String       @id @default(uuid())
+  id         String       @id @default(cuid())
   name       String
+  Users      Users?       @relation(fields: [usersId], references: [id])
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  usersId    String?
   Categories Categories[]
-  user       Users        @relation(fields: [usersId], references: [id])
-  usersId    String
-  createAt   DateTime     @default(now())
-  updateAt   DateTime     @updatedAt
-  deleteAt   DateTime     @default(now())
 }
 
 model Categories {
-  id        String     @id @default(uuid())
+  id        String     @id @default(cuid())
   name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   Products  Products[]
-  outlet    Outlets    @relation(fields: [outletsId], references: [id])
-  outletsId String
-  createAt  DateTime   @default(now())
-  updateAt  DateTime   @updatedAt
-  deleteAt  DateTime   @default(now())
+  Outlets   Outlets?   @relation(fields: [outletsId], references: [id])
+  outletsId String?
 }
 
 model Products {
-  id           String     @id @default(uuid())
+  id           String      @id @default(cuid())
   name         String
-  price        Int
-  category     Categories @relation(fields: [categoriesId], references: [id])
-  categoriesId String
-  createAt     DateTime   @default(now())
-  updateAt     DateTime   @updatedAt
-  deleteAt     DateTime   @default(now())
+  price        Float
+  description  String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  usersId      String?
+  Categories   Categories? @relation(fields: [categoriesId], references: [id])
+  categoriesId String?
+  Stocks       Stocks[]
   Bills        Bills[]
 }
 
-model Lisbill {
-  id       String   @id @default(uuid())
-  noBill   String   @unique
-  bill     Bills    @relation(fields: [billsId], references: [id])
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  deleteAt DateTime @default(now())
-  billsId  String
+model Stocks {
+  id         String    @id @default(cuid())
+  quantity   Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Products   Products? @relation(fields: [productsId], references: [id])
+  productsId String?
+}
+
+model ListBill {
+  id          String     @id @default(cuid())
+  idBill      String
+  totalQty    Int
+  totalItems  Int
+  totalPrice  Float
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Users       Users?     @relation(fields: [usersId], references: [id])
+  usersId     String?
+  Bills       Bills[]
+  BillTypes   BillTypes? @relation(fields: [billTypesId], references: [id])
+  billTypesId String?
+}
+
+model BillTypes {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ListBill ListBill[]
 }
 
 model Bills {
-  id         String    @id @default(uuid())
-  nobill     String
-  ptoduct    Products  @relation(fields: [productsId], references: [id])
-  productsId String
-  createAt   DateTime  @default(now())
-  updateAt   DateTime  @updatedAt
-  deleteAt   DateTime  @default(now())
-  Lisbill    Lisbill[]
+  id         String    @id @default(cuid())
+  name       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  ListBill   ListBill? @relation(fields: [listBillId], references: [id])
+  listBillId String?
+  Products   Products? @relation(fields: [productsId], references: [id])
+  productsId String?
+
 }

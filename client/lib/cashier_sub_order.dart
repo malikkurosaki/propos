@@ -25,7 +25,7 @@ class CashierSubOrder extends GetWidget {
         children: [
           Obx(
             () => Container(
-              color: Colors.brown[100],
+              color: Colors.teal,
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
@@ -39,7 +39,8 @@ class CashierSubOrder extends GetWidget {
                                       (int.parse(element['price'].toString().replaceAll(".", "")) * element['qty'])))
                               .replaceAll(",00", "")
                               .replaceAll("Rp", ""),
-                          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.brown),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
                         )),
                   ),
                   Visibility(
@@ -75,7 +76,6 @@ class CashierSubOrder extends GetWidget {
                     backgroundColor: Colors.white,
                     child: IconButton(
                         onPressed: () {
-
                           if (UtilPref.listorder.isEmpty) {
                             EasyLoading.showToast("Your order is empty");
                             return;
@@ -251,7 +251,7 @@ class CashierSubOrder extends GetWidget {
                                         UtilPref.savedOrderSet(value: {});
                                         UtilPref.paxSet(value: 1);
                                         UtilPref.customerSet(value: {});
-                                        
+
                                         Get.back();
                                       }),
                                   MaterialButton(
@@ -303,45 +303,63 @@ class CashierSubOrder extends GetWidget {
             child: Container(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // total item
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          color: Colors.brown[100],
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "${UtilPref.listorder.length}: Item / ",
-                                style: TextStyle(
-                                  color: Colors.brown,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // total qty
-                              Text(
-                                "${UtilPref.listorder.fold(0, (previousValue, element) => int.parse(previousValue.toString()) + element['qty'])}: Qty",
-                                style: TextStyle(
-                                  color: Colors.brown,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                  Chip(
+                    label: Text(
+                      "Total/ ${UtilPref.listorder.length}",
+                      style: TextStyle(
+                        color: Colors.brown,
                       ),
                     ),
                   ),
+                  Chip(
+                    label: Text(
+                      "Qty/ ${UtilPref.listorder.fold(0, (previousValue, element) => int.parse(previousValue.toString()) + element['qty'])}",
+                      style: TextStyle(
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  // total item
+                  // Expanded(
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: ClipRRect(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //       child: Container(
+                  //         padding: EdgeInsets.all(4),
+                  //         color: Colors.brown[100],
+                  //         child: Row(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             Text(
+                  //               "${UtilPref.listorder.length}: Item / ",
+                  //               style: TextStyle(
+                  //                 color: Colors.brown,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                  //             ),
+                  //             // total qty
+                  //             Text(
+                  //               "${UtilPref.listorder.fold(0, (previousValue, element) => int.parse(previousValue.toString()) + element['qty'])}: Qty",
+                  //               style: TextStyle(
+                  //                 color: Colors.brown,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Tooltip(
                     message: "Checkout To Proccess Payment",
                     child: MaterialButton(
-                      color: Colors.purple[300],
+                      color: Colors.green[300],
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Center(

@@ -10,13 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^3.11.1",
+    "boxen": "^6.2.1",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
-    "express": "^4.17.3",
+    "express": "^4.18.0",
     "express-async-handler": "^1.2.0",
     "moment": "^2.29.1",
-    "node-fetch": "^3.2.3",
     "prisma": "^3.11.1",
-    "sh": "github:malikkurosaki/sh"
+    "prompts": "^2.4.2"
   },
   "description": ""
 }

@@ -7,7 +7,7 @@ import 'page_edit_profile.dart';
 import 'page_login.dart';
 import 'page_profile.dart';
 import 'page_register.dart';
-import 'page_wellcome.dart';
+import 'wellcome_page.dart';
 import 'package:get/get.dart';
 
 import 'transaction_page.dart';
@@ -33,7 +33,7 @@ class UtilRoutes {
     GetPage(name: UtilRoutes.register().key, page: () => PageRegister()),
     GetPage(name: UtilRoutes.profile().key, page: () => PageProfile()),
     GetPage(name: UtilRoutes.editProfile().key, page: () => PageEditProfile()),
-    GetPage(name: UtilRoutes.wellcome().key, page: () => PageWellcome()),
+    GetPage(name: UtilRoutes.wellcome().key, page: () => WellcomePage()),
     GetPage(name: UtilRoutes.cashier().key, page: () => CashierPage()),
     GetPage(name: UtilRoutes.cashierPayment().key, page: () => CashierPagePayment()),
     GetPage(name: UtilRoutes.transaction().key, page: () => TransactionPage()),
