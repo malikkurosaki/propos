@@ -21,7 +21,7 @@ async function XGit() {
     }).catch(err => process.exit());
 
     let jadinya = selBranch.sb.replace('*', '');
-    execSync(`git add . && git commit -m "$(date)" && git push origin ${jadinya}`);
+    execSync(`git add . && git commit -m "$(date)" && git push origin ${jadinya}`, {stdio: 'inherit'});
     process.exit()
     
 }
