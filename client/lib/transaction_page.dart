@@ -1,4 +1,4 @@
-import 'package:client/util_pref.dart';
+import 'package:client/utils/util_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

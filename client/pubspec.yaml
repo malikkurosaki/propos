@@ -51,6 +51,10 @@ dependencies:
   loadmore: ^2.0.1
   load_items: ^0.4.0
   animate_do: ^2.1.0
+  carousel_slider: ^4.1.1
+  image_network: ^2.5.0
+  image_picker: ^0.8.5
+  device_info_plus: ^3.2.3
 
 dev_dependencies:
   flutter_test:
