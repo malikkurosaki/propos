@@ -7,10 +7,10 @@ import 'g_val.dart';
 import 'util_value.dart';
 
 class UtilHttp {
-  static const host = "http://localhost:3000";
-  static const hostApi = 'http://localhost:3000/api/v1';
-  static const hostImage = "http://localhost:3000/image";
-  static final hostImageWithUser = "http://localhost:3000/image/${GVal.user.value.val['id']}/";
+  static const host = "http://192.168.192.113:3000";
+  static const hostApi = 'http://192.168.192.113:3000/api/v1';
+  static const hostImage = "http://192.168.192.113:3000/image";
+  static final hostImageWithUser = "http://192.168.192.113:3000/image/${GVal.user.value.val['id']}/";
 
   // register
   Future<http.Response> register(Map? body) => http.post(Uri.parse(host + '/register'), body: body);
