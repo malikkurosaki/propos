@@ -8,7 +8,7 @@ import 'package:client/products/comp_image_picker.dart';
 import 'package:client/products/comp_stock.dart';
 import 'package:client/utils/util_http.dart';
 import 'package:client/utils/util_load.dart';
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:client/utils/util_routers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -39,6 +39,7 @@ class ProductCreate extends StatelessWidget {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) {
         return ListView(
+          controller: ScrollController(),
           children: [
             Wrap(
               children: [
@@ -66,61 +67,66 @@ class ProductCreate extends StatelessWidget {
                   child: MaterialButton(
                     color: Colors.blue,
                     onPressed: () async {
-                      if (body["name"] == null ||
-                          body["price"] == null ||
-                          body["categoriesId"] == null ) {
+                      if (body["name"] == null || body["price"] == null || body["categoriesId"] == null) {
                         EasyLoading.showError('Please fill all field, name, price, description, category, outlet');
                         return;
                       }
 
-                      try {
-                        Get.dialog(AlertDialog(
-                          title: Text("Are you sure?"),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Are you sure to create this product?"),
-                              Divider(),
-                              Text("Name: ${body["name"]}"),
-                              Text("Price: ${body["price"]}"),
-                              Text("Description: ${body["description"]}"),
-                              Text("Category: ${body["categoriesId"]}"),
-                              Text("Outlet: ${body["outletsId"]}"),
-                              Text("Image: ${body["image"]}"),
-                              Text("Min Stock: ${body["minStock"]}"),
-                              Text("Stock: ${body["stock"]}"),
-
-                            ],
-                          ),
-                          actions: [
-                            MaterialButton(
-                              child: Text("Cancel"),
-                              onPressed: () => Get.back(),
-                            ),
-                            MaterialButton(
-                              child: Text("Yes"),
-                              onPressed: () async {
-                                final res = await UtilHttp.productCreate(body);
-                                if (res.statusCode == 200) {
-                                  EasyLoading.showSuccess('Product created');
-                                  UtilLoad.product(isAler: true);
-                                  Get.back();
-                                } else {
-                                  EasyLoading.showError('Failed to create product');
-                                }
-                              },
-                            ),
-                          ],
-                        ));
-
-                      
-                      } catch (e) {
-                        print(e.toString());
-                        EasyLoading.showError(e.toString());
+                      final res = await UtilHttp.productCreate(body);
+                      if (res.statusCode == 200) {
+                        EasyLoading.showSuccess('Product created');
+                        UtilLoad.loadProduct();
+                      } else {
+                        EasyLoading.showError(res.statusCode.toString());
                       }
+
+                      // try {
+                      //   Get.dialog(AlertDialog(
+                      //     title: const Text("Are you sure?"),
+                      //     content: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         const Text("Are you sure to create this product?"),
+                      //         const Divider(),
+                      //         Text("Name: ${body["name"]}"),
+                      //         Text("Price: ${body["price"]}"),
+                      //         Text("Description: ${body["description"]}"),
+                      //         Text("Category: ${body["categoriesId"]}"),
+                      //         Text("Outlet: ${body["outletsId"]}"),
+                      //         Text("Image: ${body["image"]}"),
+                      //         Text("Min Stock: ${body["minStock"]}"),
+                      //         Text("Stock: ${body["stock"]}"),
+
+                      //       ],
+                      //     ),
+                      //     actions: [
+                      //       MaterialButton(
+                      //         child: const Text("Cancel"),
+                      //         onPressed: () => Get.back(),
+                      //       ),
+                      //       MaterialButton(
+                      //         child: const Text("Yes"),
+                      //         onPressed: () async {
+                      //           final res = await UtilHttp.productCreate(body);
+                      //           if (res.statusCode == 200) {
+                      //             EasyLoading.showSuccess('Product created');
+                      //             UtilLoad.product(isAler: true);
+                      //             Get.back();
+                      //           } else {
+                      //             EasyLoading.showError('Failed to create product');
+                      //           }
+                      //         },
+                      //       ),
+                      //     ],
+                      //   ));
+
+                      // } catch (e) {
+                      //   print(e.toString());
+                      //   EasyLoading.showError(e.toString());
+                      // }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12),
                       child: Center(
                         child: Text(
                           "Add Product",

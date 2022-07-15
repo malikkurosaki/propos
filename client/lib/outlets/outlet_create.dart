@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_conn.dart';
 import 'package:client/utils/util_http.dart';
 import 'package:client/utils/util_load.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 
 class OutletCreate extends StatelessWidget {
   OutletCreate({Key? key, this.onSave, this.value}) : super(key: key);
@@ -38,7 +39,7 @@ class OutletCreate extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Add Outlet",
+                  const Text("Add Outlet",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -53,7 +54,7 @@ class OutletCreate extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Outlet Name",
                         hintText: "Outlet Name",
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                        border: const OutlineInputBorder(borderSide: BorderSide.none),
                         fillColor: Colors.grey[100],
                         filled: true,
                       ),
@@ -68,7 +69,7 @@ class OutletCreate extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Outlet Description",
                         hintText: "Outlet Description",
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                        border: const OutlineInputBorder(borderSide: BorderSide.none),
                         fillColor: Colors.grey[100],
                         filled: true,
                       ),
@@ -87,14 +88,14 @@ class OutletCreate extends StatelessWidget {
                         final body = {
                           "name": nameController.text,
                           "description": descController.text,
-                          "usersId": UtilPref.user["id"]
+                          "usersId":GVal.user.value.val["id"]
                         };
 
                         onSave!(body);
                         
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Center(
                           child: Text("Add Outlet",
                               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),

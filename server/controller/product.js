@@ -53,7 +53,7 @@ const ProductCreate = expressAsyncHandler(async (req, res) => {
 
 })
 
-// get product
+// product get
 const ProductGet = expressAsyncHandler(async (req, res) => {
     const products = await prisma.products.findMany({
         where: {
@@ -87,7 +87,7 @@ const ProductGet = expressAsyncHandler(async (req, res) => {
             }
         }
     })
-    res.json({
+    res.status(200).json({
         success: products != null,
         data: products,
         message: products == null ? "Gagal mengambil produk" : ""

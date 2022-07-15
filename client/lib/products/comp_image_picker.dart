@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_http.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 
 class CompImagePicker extends StatelessWidget {
   CompImagePicker({Key? key, this.onImageNameChange}) : super(key: key);
@@ -27,11 +28,18 @@ class CompImagePicker extends StatelessWidget {
       builder: (context, sizingInformation) => Obx(
         () => SizedBox(
           width: sizingInformation.isMobile ? double.infinity : 360,
-          child: Card(
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey.shade300
+              ),
+              
+            ),
             child: Column(
               children: [
                 CheckboxListTile(
-                  title: Text("Image", style: TextStyle(fontSize: 32)),
+                  title: const Text("Image", style: TextStyle(fontSize: 32)),
                   value: withImage.value,
                   onChanged: (value) {
                     withImage.value = !withImage.value;
@@ -64,7 +72,7 @@ class CompImagePicker extends StatelessWidget {
                             respons.files.add(file);
                             // add header
                             respons.headers.addAll(
-                                {"Authorization": "Bearer ${UtilPref.token}", "Content-Type": "multipart/form-data"});
+                                {"Authorization": "Bearer ${UtilValue.token}", "Content-Type": "multipart/form-data"});
 
                             final response = await respons.send().then((value) => value.stream.bytesToString());
                             final result = jsonDecode(response);
@@ -83,13 +91,13 @@ class CompImagePicker extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.add_a_photo,
                                   size: 32,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text("Pick Image"),
                                 ),
                               ],
@@ -128,14 +136,15 @@ class CompImagePicker extends StatelessWidget {
                             child: FutureBuilder<http.Response>(
                               future: UtilHttp.availableImage(),
                               builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done
-                                  ? Text('loading ...')
-                                  : Obx(
-                                      () => Container(
-                                        padding: EdgeInsets.all(8),
+                                  ? const Text('loading ...')
+                                  : Container(
+                                        padding: const EdgeInsets.all(8),
                                         width: double.infinity,
-                                        child: GridView.extent(
+                                        child: 
+                                        GridView.extent(
                                           maxCrossAxisExtent: 360 / 3,
                                           children: [
+                                            
                                             for (final image in List.from(jsonDecode(snapshot.data!.body)))
                                               InkWell(
                                                 onTap: () {
@@ -149,17 +158,16 @@ class CompImagePicker extends StatelessWidget {
                                                         width: 4),
                                                   ),
                                                   padding:
-                                                      gambarIni.value == image ? EdgeInsets.all(12) : EdgeInsets.all(0),
+                                                      gambarIni.value == image ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
                                                   child: CachedNetworkImage(
                                                     imageUrl:
-                                                        UtilHttp.urlImage + "/" + UtilPref.user['id'] + "/" + image,
+                                                        UtilHttp.hostImage + "/" +GVal.user.value.val['id'] + "/" + image,
                                                   ),
                                                 ),
                                               )
                                           ],
                                         ),
-                                      ),
-                                    ),
+                                      )
                             ),
                           ),
                         ),

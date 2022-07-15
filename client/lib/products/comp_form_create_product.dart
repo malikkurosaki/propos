@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:get/get.dart';
 
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 import '../utils/util_routers.dart';
 
 class CompFormCreateProduct extends StatelessWidget {
@@ -26,12 +26,18 @@ class CompFormCreateProduct extends StatelessWidget {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => SizedBox(
         width: sizingInformation.isMobile ? double.infinity : 360,
-        child: Card(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.shade300
+            )
+          ),
+          margin: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   "form create product",
                   style: TextStyle(
@@ -47,10 +53,10 @@ class CompFormCreateProduct extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   controller: _nameController,
                   onChanged: (value) => onNameChange!(value),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Name",
                     hintText: "Product Name",
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
@@ -72,10 +78,10 @@ class CompFormCreateProduct extends StatelessWidget {
 
                     onPriceChange!(value);
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Price",
                     hintText: "Product Price",
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
@@ -89,10 +95,10 @@ class CompFormCreateProduct extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   controller: _descriptionController,
                   onChanged: (value) => onDescriptionChange!(value),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Description",
                     hintText: "Product Description",
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                   ),

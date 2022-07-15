@@ -1,0 +1,134 @@
+[
+    {
+        "pin": "tD7DabkcS0",
+        "name": "name0",
+        "address": "address0",
+        "email": "email0@gmail.com",
+        "phone": "08123456789",
+        "password": "password0",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "woYHEBpO7C",
+        "name": "name1",
+        "address": "address1",
+        "email": "email1@gmail.com",
+        "phone": "08123456789",
+        "password": "password1",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "rx7jn1L3wG",
+        "name": "name2",
+        "address": "address2",
+        "email": "email2@gmail.com",
+        "phone": "08123456789",
+        "password": "password2",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "xA3VttXq1G",
+        "name": "name3",
+        "address": "address3",
+        "email": "email3@gmail.com",
+        "phone": "08123456789",
+        "password": "password3",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "YvhX4QTqHq",
+        "name": "name4",
+        "address": "address4",
+        "email": "email4@gmail.com",
+        "phone": "08123456789",
+        "password": "password4",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "n6BpQqMl54",
+        "name": "name5",
+        "address": "address5",
+        "email": "email5@gmail.com",
+        "phone": "08123456789",
+        "password": "password5",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "LTfBflqwZG",
+        "name": "name6",
+        "address": "address6",
+        "email": "email6@gmail.com",
+        "phone": "08123456789",
+        "password": "password6",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "BqlRanzK9f",
+        "name": "name7",
+        "address": "address7",
+        "email": "email7@gmail.com",
+        "phone": "08123456789",
+        "password": "password7",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "MvaweEVH3T",
+        "name": "name8",
+        "address": "address8",
+        "email": "email8@gmail.com",
+        "phone": "08123456789",
+        "password": "password8",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "bTpLIkVANZ",
+        "name": "name9",
+        "address": "address9",
+        "email": "email9@gmail.com",
+        "phone": "08123456789",
+        "password": "password9",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "5nCgp1MOg0",
+        "name": "name10",
+        "address": "address10",
+        "email": "email10@gmail.com",
+        "phone": "08123456789",
+        "password": "password10",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    },
+    {
+        "pin": "PZnBqMzr1K",
+        "name": "name11",
+        "address": "address11",
+        "email": "email11@gmail.com",
+        "phone": "08123456789",
+        "password": "password11",
+        "usersId": "1",
+        "outletsId": "1",
+        "rolesId": "1"
+    }
+]

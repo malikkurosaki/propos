@@ -6,7 +6,7 @@ class SubSidebr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("sidebar"),
+      child: const Text("sidebar"),
     );
   }
 }

@@ -36,16 +36,18 @@ const UserCreate = expressAsyncHandler(async (req, res) => {
 
 // user get
 const UsersGet = expressAsyncHandler(async (req, res) => {
-    let users = await prisma.users.findMany({
-        include: {
-            Profiles: true,
-            Outlets: true,
-        },
+
+    let users = await prisma.users.findUnique({
+        where: {
+            id: req.usersId
+        }
     });
-    res.json({
+
+    res.status(200).json({
         success: true,
         data: users,
     });
+  
 })
 
 // user update
@@ -126,7 +128,7 @@ const UserLoad = expressAsyncHandler(async (req, res) => {
 
 
 // user router get
-userRouter.get('/', UsersGet);
+userRouter.get('/get', UsersGet);
 userRouter.get('/load', UserLoad);
 
 // export

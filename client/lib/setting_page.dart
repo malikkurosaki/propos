@@ -10,7 +10,7 @@ class SettingPage extends StatelessWidget {
     return Material(
       child: SafeArea(
         child: Column(
-          children: [
+          children: const [
             CompAppBar(title: "setting"),
           
           ],

@@ -1,27 +1,28 @@
 import 'dart:math';
 
+import 'package:client/utils/g_val.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart' as anido;
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 
 class CashierPageSavedOrder extends StatelessWidget {
   const CashierPageSavedOrder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => UtilPref.listSaveOrder.isEmpty
+    return Obx(() => UtilValue.listSaveOrder.isEmpty
             ? Container()
             : InkWell(
                 child: Chip(
                   avatar: CircleAvatar(
                     backgroundColor: Colors.green,
                     child: Text(
-                      UtilPref.listSaveOrder.length.toString(),
-                      style: TextStyle(color: Colors.white),
+                      UtilValue.listSaveOrder.length.toString(),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                  label: Text(
+                  label: const Text(
                     "Saved Order",
                     style: TextStyle(fontSize: 16),
                   ),
@@ -34,14 +35,14 @@ class CashierPageSavedOrder extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
-                              children: [
+                              children: const [
                                 CircleAvatar(
                                     backgroundColor: Colors.orange,
                                     child: BackButton(
                                       color: Colors.white,
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.0),
                                   child: Text(
                                     "Saved Order",
                                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -54,15 +55,22 @@ class CashierPageSavedOrder extends StatelessWidget {
                             child: Obx(
                               () => GridView.extent(
                                 controller: ScrollController(),
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 maxCrossAxisExtent: Get.width * 0.2,
                                 children: [
-                                  for (final item in UtilPref.listSaveOrder)
+                                  for (final item in UtilValue.listSaveOrder)
                                     InkWell(
                                       onTap: () {
-                                        UtilPref.paxSet(value: item['pax']);
-                                        UtilPref.customerSet(value: Map.from(item['customer']));
-                                        UtilPref.listorderSet(value: List.from(item['order']));
+                                        // UtilValue.paxSet(value: item['pax']);
+                                        GVal.pax.value.val = item['pax'];
+                                        GVal.pax.refresh();
+
+                                        // UtilValue.customerSet(value: Map.from(item['customer']));
+                                        GVal.customer.value.val = Map.from(item['customer']);
+                                        GVal.customer.refresh();
+                                        
+                                        GVal.listOrders.value.val = List.from(item['order']);
+                                        GVal.listOrders.refresh();
 
                                         // final data = {
                                         //   "id": Uuid().v4(),
@@ -73,14 +81,23 @@ class CashierPageSavedOrder extends StatelessWidget {
                                         //   "date": DateTime.now().toString()
                                         // };
 
-                                        UtilPref.savedOrderSet(value: {
+                                        // UtilValue.savedOrderSet(value: {
+                                        //   'date': item['date'],
+                                        //   'name': item['name'],
+                                        //   'id': item['id'],
+                                        //   'pax': item['pax'],
+                                        //   'customer': Map.from(item['customer']),
+                                        //   'order': List.from(item['order'])
+                                        // });
+                                        GVal.savedOrder.value.val = {
                                           'date': item['date'],
                                           'name': item['name'],
                                           'id': item['id'],
                                           'pax': item['pax'],
                                           'customer': Map.from(item['customer']),
                                           'order': List.from(item['order'])
-                                        });
+                                        };
+                                        GVal.savedOrder.refresh();
 
                                         Get.back();
                                       },
@@ -107,12 +124,14 @@ class CashierPageSavedOrder extends StatelessWidget {
                                                       alignment: Alignment.topRight,
                                                       child: IconButton(
                                                         onPressed: () {
-                                                          UtilPref.listSaveOrder.remove(item);
-                                                          UtilPref.listSaveOrderSet(
-                                                            value: List.from(UtilPref.listSaveOrder),
+                                                          UtilValue.listSaveOrder.remove(item);
+                                                          UtilValue.listSaveOrderSet(
+                                                            value: List.from(UtilValue.listSaveOrder),
                                                           );
-                                                          if (UtilPref.listSaveOrder.isEmpty) {
-                                                            UtilPref.savedOrderSet(value: {});
+                                                          if (UtilValue.listSaveOrder.isEmpty) {
+                                                            // UtilValue.savedOrderSet(value: {});
+                                                            GVal.savedOrder.value.val = {};
+                                                            GVal.savedOrder.refresh();
                                                             Get.back();
                                                           }
                                                         },
@@ -127,13 +146,13 @@ class CashierPageSavedOrder extends StatelessWidget {
                                                   ),
                                                   Container(
                                                     color: Colors.white54,
-                                                    padding: EdgeInsets.all(4),
+                                                    padding: const EdgeInsets.all(4),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Icon(Icons.numbers),
+                                                            const Icon(Icons.numbers),
                                                             Expanded(
                                                               child: Text(
                                                                 item['id'].toString(),
@@ -145,7 +164,7 @@ class CashierPageSavedOrder extends StatelessWidget {
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Icon(Icons.title),
+                                                            const Icon(Icons.title),
                                                             Text(
                                                               item['name'].toString(),
                                                               maxLines: 1,
@@ -154,13 +173,13 @@ class CashierPageSavedOrder extends StatelessWidget {
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Icon(Icons.date_range),
+                                                            const Icon(Icons.date_range),
                                                             Text(item['date'].toString().split(' ')[0]),
                                                           ],
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Icon(Icons.av_timer_outlined),
+                                                            const Icon(Icons.av_timer_outlined),
                                                             Text(
                                                               item['date']
                                                                   .toString()

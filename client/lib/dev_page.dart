@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:client/comps/comp_app_bar.dart';
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_http.dart';
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,53 +15,54 @@ class DevPage extends StatelessWidget {
     return Material(
       child: ListView(
         children: [
-          CompAppBar(title: "Dev Page"),
-          Text(
+          const CompAppBar(title: "Dev Page"),
+          const Text(
             "User Data",
             style: TextStyle(fontSize: 32),
           ),
           Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               color: Colors.grey[100],
-              child: Text(JsonEncoder.withIndent("   ").convert(UtilPref.user))),
-          Text(
+              child: Text(const JsonEncoder.withIndent("   ").convert(GVal.user.value.val))),
+          const Text(
             "Token Data",
             style: TextStyle(fontSize: 32),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             color: Colors.grey[100],
             child: Text(
-              UtilPref.token.toString(),
+              UtilValue.token.toString(),
             ),
           ),
           // user load
-          Text(
+          const Text(
             "User Load",
             style: TextStyle(fontSize: 32),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             color: Colors.grey[100],
             child: FutureBuilder<http.Response>(
               future: UtilHttp.userLoad(),
-              builder: (context, snapshot) =>
-                  snapshot.connectionState != ConnectionState.done ? Text("loading") : Text(JsonEncoder.withIndent("  ").convert(jsonDecode(snapshot.data!.body))),
+              builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done
+                  ? const Text("loading")
+                  : Text(const JsonEncoder.withIndent("  ").convert(jsonDecode(snapshot.data!.body))),
             ),
           ),
           // product
-          Text(
+          const Text(
             "Product Load",
             style: TextStyle(fontSize: 32),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             color: Colors.grey[100],
             child: FutureBuilder<http.Response>(
               future: UtilHttp.productGet(),
               builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done
-                  ? Text("loading")
-                  : Text(JsonEncoder.withIndent("  ").convert(jsonDecode(snapshot.data!.body))),
+                  ? const Text("loading")
+                  : Text(const JsonEncoder.withIndent("  ").convert(jsonDecode(snapshot.data!.body))),
             ),
           )
         ],

@@ -6,7 +6,7 @@ class HomeSubMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Home Sub Main"),
+      child: const Text("Home Sub Main"),
     );
   }
 }

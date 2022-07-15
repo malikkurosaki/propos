@@ -18,12 +18,18 @@ class CompStock extends StatelessWidget {
       builder: (context, sizingInformation) => Obx(
         () => SizedBox(
           width: sizingInformation.isMobile ? double.infinity : 360,
-          child: Card(
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey.shade300
+              )
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CheckboxListTile(
-                  title: Text(
+                  title: const Text(
                     "Stock",
                     style: TextStyle(fontSize: 32),
                   ),
@@ -51,7 +57,7 @@ class CompStock extends StatelessWidget {
                               hintText: "Stock",
                               fillColor: Colors.grey[100],
                               filled: true,
-                              border: OutlineInputBorder(borderSide: BorderSide.none)),
+                              border: const OutlineInputBorder(borderSide: BorderSide.none)),
                         ),
                       ),
                       // min stock
@@ -81,7 +87,7 @@ class CompStock extends StatelessWidget {
                               hintText: "Min Stock",
                               fillColor: Colors.grey[100],
                               filled: true,
-                              border: OutlineInputBorder(borderSide: BorderSide.none)),
+                              border: const OutlineInputBorder(borderSide: BorderSide.none)),
                         ),
                       ),
                     ],

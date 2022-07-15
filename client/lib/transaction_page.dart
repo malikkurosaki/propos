@@ -1,4 +1,4 @@
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,10 +14,10 @@ class TransactionPage extends StatelessWidget {
             Row(children: [
               CircleAvatar(
                 backgroundColor: Colors.grey[200],
-                child: BackButton(),
+                child: const BackButton(),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Transaction",
                   style: TextStyle(fontSize: 40),
@@ -36,7 +36,7 @@ class TransactionPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: "Search",
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.search),
@@ -45,9 +45,9 @@ class TransactionPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      for (final item in UtilPref.listBill)
+                      for (final item in UtilValue.listBill)
                         ListTile(
-                          leading: Icon(Icons.payment),
+                          leading: const Icon(Icons.payment),
                           title: Text(item['id_bill']),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class TransactionPage extends StatelessWidget {
                             ],
                           ),
                           isThreeLine: true,
-                          trailing: Icon(Icons.keyboard_arrow_right),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
                         )
                     ],
                   ),
@@ -65,7 +65,7 @@ class TransactionPage extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     children: [
-                      for (final item in UtilPref.listBill)
+                      for (final item in UtilValue.listBill)
                         ListTile(
                           
                           title: Text(item['id_bill']),

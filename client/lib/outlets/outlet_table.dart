@@ -1,9 +1,10 @@
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_http.dart';
 import 'package:client/utils/util_load.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 import '../utils/util_val.dart';
 
 // outlet table
@@ -26,7 +27,7 @@ class OutletTable extends StatelessWidget {
                 elevation: 0,
                 child: DataTable(
                   showCheckboxColumn: true,
-                  columns: [
+                  columns: const [
                     DataColumn(
                       label: Text("#"),
                     ),
@@ -41,11 +42,11 @@ class OutletTable extends StatelessWidget {
                     ),
                   ],
                   rows: [
-                    for (var outlet in UtilPref.outlets)
+                    for (var outlet in GVal.outlets.value.val)
                       DataRow(
                         cells: [
                           DataCell(
-                            Text((UtilPref.outlets.indexOf(outlet)+1).toString()),
+                            Text((GVal.outlets.value.val.indexOf(outlet)+1).toString()),
                           ),
                           DataCell(
                             Text(outlet["name"].toString()),
@@ -57,26 +58,26 @@ class OutletTable extends StatelessWidget {
                             Row(
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.orange,),
+                                  icon: const Icon(Icons.edit, color: Colors.orange,),
                                   onPressed: () {
                                     // dialog edit table
                                     Get.dialog(
                                       AlertDialog(
-                                        title: Text("Edit Outlet"),
+                                        title: const Text("Edit Outlet"),
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             // name
                                             TextField(
                                               controller: _titleController,
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 labelText: "Name",
                                               ),
                                             ),
                                             // description
                                             TextField(
                                               controller: _descriptionController,
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 labelText: "Description",
                                               ),
                                             ),
@@ -84,19 +85,19 @@ class OutletTable extends StatelessWidget {
                                         ),
                                         actions: [
                                           MaterialButton(
-                                            child: Text("Save"),
+                                            child: const Text("Save"),
                                             onPressed: () {
                                               // update data
-                                              UtilPref.outlets[UtilPref.outlets.indexOf(outlet)]["name"] =
+                                              GVal.outlets.value.val[GVal.outlets.value.val.indexOf(outlet)]["name"] =
                                                   _titleController.text;
-                                              UtilPref.outlets[UtilPref.outlets.indexOf(outlet)]["description"] =
+                                              GVal.outlets.value.val[GVal.outlets.value.val.indexOf(outlet)]["description"] =
                                                   _descriptionController.text;
                                               // close dialog
                                               Get.back();
                                             },
                                           ),
                                           MaterialButton(
-                                            child: Text("Cancel"),
+                                            child: const Text("Cancel"),
                                             onPressed: () {
                                               // close dialog
                                               Get.back();
@@ -108,24 +109,24 @@ class OutletTable extends StatelessWidget {
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.pink,),
+                                  icon: const Icon(Icons.delete, color: Colors.pink,),
                                   onPressed: () {
                                     // dialog delete table
                                     Get.dialog(
                                       AlertDialog(
-                                        title: Text("Delete Outlet"),
-                                        content: Text("Are you sure?"),
+                                        title: const Text("Delete Outlet"),
+                                        content: const Text("Are you sure?"),
                                         actions: [
                                           MaterialButton(
-                                            child: Text("Yes"),
+                                            child: const Text("Yes"),
                                             onPressed: () async {
                                               await UtilHttp.outletDelete(outlet["id"]);
-                                              await UtilLoad.outlet();
+                                              await UtilLoad.loadOutlet();
                                               Get.back();
                                             },
                                           ),
                                           MaterialButton(
-                                            child: Text("No"),
+                                            child: const Text("No"),
                                             onPressed: () {
                                               // close dialog
                                               Get.back();
@@ -138,9 +139,9 @@ class OutletTable extends StatelessWidget {
                                 ),
                                 IconButton(
                                   onPressed: (){
-                                    UtilPref.indexOutletPageSet(value: 3);
+                                    UtilValue.indexOutletPageSet(value: 3);
                                   }, 
-                                  icon: Icon(Icons.grading_outlined, color: Colors.green,),
+                                  icon: const Icon(Icons.grading_outlined, color: Colors.green,),
                                 )
                               ],
                             ),

@@ -7,4 +7,6 @@ class UtilVal{
   static final isMobile = false.obs;
   static final logo = const AssetImage('assets/images/bg2.jpg').obs;
   static final devMode = true.obs;
+
+  
 }

@@ -5,7 +5,7 @@ import 'package:client/outlets/outlet_create.dart';
 import 'package:client/outlets/outlet_detail.dart';
 import 'package:client/outlets/outlet_table.dart';
 import 'package:client/utils/util_load.dart';
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:client/utils/util_val.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,9 +35,9 @@ class OutletPage extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         onPressed: () {
-                          UtilLoad.outlet(isAlert: true);
+                          UtilLoad.loadOutlet(isAlert: true);
                         },
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                       ),
                     ),
                   ),
@@ -55,20 +55,20 @@ class OutletPage extends StatelessWidget {
                           child: Obx(() => ListView(
                                 children: [
                                   Ink(
-                                    color: UtilPref.indexOutletPage.value == 0 ? Colors.grey[100] : Colors.transparent,
+                                    color: UtilValue.indexOutletPage.value == 0 ? Colors.grey[100] : Colors.transparent,
                                     child: ListTile(
-                                      title: Text("List outlet"),
+                                      title: const Text("List outlet"),
                                       onTap: () {
-                                        UtilPref.indexOutletPageSet(value: 0);
+                                        UtilValue.indexOutletPageSet(value: 0);
                                       },
                                     ),
                                   ),
                                   Ink(
-                                    color: UtilPref.indexOutletPage.value == 1 ? Colors.grey[100] : Colors.transparent,
+                                    color: UtilValue.indexOutletPage.value == 1 ? Colors.grey[100] : Colors.transparent,
                                     child: ListTile(
-                                      title: Text("new outlet"),
+                                      title: const Text("new outlet"),
                                       onTap: () {
-                                        UtilPref.indexOutletPageSet(value: 1);
+                                        UtilValue.indexOutletPageSet(value: 1);
                                       },
                                     ),
                                   )
@@ -81,7 +81,7 @@ class OutletPage extends StatelessWidget {
                       child: Obx(
                         () => IndexedStack(
                           sizing: StackFit.passthrough,
-                          index: UtilPref.indexOutletPage.value,
+                          index: UtilValue.indexOutletPage.value,
                           children: [
                             OutletTable(),
                             OutletCreate(
@@ -92,7 +92,7 @@ class OutletPage extends StatelessWidget {
                                   final hasil = json.decode(outlet.body);
                                   if (hasil["success"]) {
                                     EasyLoading.showToast("Outlet created");
-                                    UtilLoad.outlet();
+                                    UtilLoad.loadOutlet();
                                   } else {
                                     EasyLoading.showToast("Failed to create outlet");
                                   }

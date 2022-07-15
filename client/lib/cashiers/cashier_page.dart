@@ -4,8 +4,9 @@ import 'dart:math';
 import 'package:client/cashiers/cashier_page_saved_order.dart';
 import 'package:client/cashiers/cashier_sub_main.dart';
 import 'package:client/cashiers/cashier_sub_order.dart';
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_conn.dart';
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:client/utils/util_routers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect.dart';
@@ -24,7 +25,7 @@ class CashierPage extends StatelessWidget {
     // onLoad();
     return KeyboardDismisser(
       child: Material(
-        color: Colors.blueGrey[100],
+        color: Colors.white,
         child: ResponsiveBuilder(
           builder: (context, sizingInformation) => SafeArea(
             child: SafeArea(
@@ -32,13 +33,18 @@ class CashierPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8),
-                    color: Colors.white,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      border: Border.all(
+                        color: Colors.grey.shade300
+                      )
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CircleAvatar(
-                          backgroundColor: Colors.grey[50],
+                          backgroundColor: Colors.white,
                           child: IconButton(
                             icon: Icon(
                               Icons.arrow_back,
@@ -50,19 +56,10 @@ class CashierPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          UtilPref.outlet['name'].toString().toUpperCase(),
-                          style: TextStyle(fontSize: 24, color: Colors.grey),
+                          GVal.outlet.value.val['name'].toString().toUpperCase(),
+                          style: const TextStyle(fontSize: 24, color: Colors.grey),
                         ),
-                        // Expanded(
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: Text(
-                        //       "Cashier",
-                        //       style: TextStyle(fontSize: 36),
-                        //     ),
-                        //   ),
-                        // ),
-                        CashierPageSavedOrder()
+                        const CashierPageSavedOrder()
                       ],
                     ),
                   ),
@@ -70,21 +67,12 @@ class CashierPage extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Obx(() => UtilPref.listMenu.isEmpty
-                              ? Text("Loading ...")
-                              : Visibility(
-                                  visible: !sizingInformation.isMobile,
-                                  child: CashierSubMain(),
-                                )),
+                        const Expanded(
+                          child: CashierSubMain()
                         ),
-                        Center(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: sizingInformation.isMobile ? Get.width : Get.width / 3,
-                            ),
-                            child: CashierSubOrder(),
-                          ),
+                        SizedBox(
+                          width: sizingInformation.isMobile ? Get.width : 500,
+                          child: CashierSubOrder(),
                         )
                       ],
                     ),

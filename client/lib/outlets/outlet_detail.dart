@@ -8,7 +8,7 @@ class OutletDetail extends StatelessWidget {
     return Column(
       children: [
         Row(
-          children: [
+          children: const [
             Text("Outlet"),
             Text("Outlet"),
 

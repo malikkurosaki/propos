@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:client/cashiers/cashier_fun.dart';
+import 'package:client/utils/g_val.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../utils/util_pref.dart';
+import 'package:intl/intl.dart';
+import '../utils/util_value.dart';
 import 'package:animate_do/animate_do.dart' as anido;
 
 class CashierSubOrderItem extends StatelessWidget {
@@ -12,23 +15,25 @@ class CashierSubOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Card(
-        // color: UtilPref.lastClick['title'] == item['title'] ? Colors.white : Colors.grey[200],
-        elevation: UtilPref.lastClick['title'] == item['title'] ? 8 : 0,
+      () => Container(
+        decoration: BoxDecoration(
+            color: UtilValue.lastClick["id"] == item["id"] ? Colors.grey[100] : Colors.white,
+            border: Border.all(color: Colors.grey.shade300, width: 0.5)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Visibility(
-              visible: UtilPref.lastClick['title'] == item['title'],
+              visible: UtilValue.lastClick["id"] == item["id"],
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  color: Colors.grey[200],
+                  padding: const EdgeInsets.all(8),
                   height: 115,
                   child: Column(
                     children: [
                       Flexible(
                         child: InkWell(
-                          onTap: addQty,
+                          onTap: () => CashierFun.addQty(item),
                           child: SizedBox(
                             child: Center(
                               child: Icon(
@@ -65,32 +70,16 @@ class CashierSubOrderItem extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  if (UtilPref.lastClick['title'] == item['title']) {
-                    UtilPref.lastClickSet(value: {});
+                  if (UtilValue.lastClick["id"] == item["id"]) {
+                    UtilValue.lastClickSet(value: {});
                   } else {
-                    UtilPref.lastClickSet(value: item);
+                    UtilValue.lastClickSet(value: item);
                   }
                 },
                 onLongPress: dialogDeleteQty,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: CircleAvatar(
-                    //     child: CircleAvatar(
-                    //       backgroundColor: Colors.white,
-                    //       // backgroundColor:
-                    //       //     UtilPref.lastClick['title'] == item['title'] ? Colors.green : Colors.brown[50],
-                    //       child: Text(
-                    //         item["qty"].toString(),
-                    //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey
-                    //             // color: UtilPref.lastClick['title'] == item['title'] ? Colors.white : Colors.brown,
-                    //             ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -100,15 +89,14 @@ class CashierSubOrderItem extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                item["title"].toString(),
+                                item["name"].toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   // color: Colors.brown,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      UtilPref.lastClick['title'] == item['title'] ? Colors.grey[700] : Colors.blueGrey,
+                                  color: UtilValue.lastClick["id"] == item["id"] ? Colors.grey[700] : Colors.grey[600],
                                 ),
                               ),
                             ),
@@ -122,11 +110,12 @@ class CashierSubOrderItem extends StatelessWidget {
                                         child: Text(
                                           item["qty"].toString(),
                                           style: TextStyle(
-                                              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey
-                                              // color: UtilPref.lastClick['title'] == item['title'] ? Colors.white : Colors.brown,
+                                              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[600]
+                                              // color: UtilPref.lastClick["id"] == item["id"] ? Colors.white : Colors.brown,
                                               ),
                                         ),
                                       ),
+                                      const Text("x"),
                                       Chip(
                                         backgroundColor: Colors.white,
                                         label: Text(
@@ -134,14 +123,21 @@ class CashierSubOrderItem extends StatelessWidget {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.blueGrey,
+                                            color: Colors.grey[600],
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Chip(label: Text((item["price"] * item["qty"]).toString())),
+                                Text(
+                                  NumberFormat.simpleCurrency(locale: "id_ID")
+                                      .format(
+                                        (item["price"] * item["qty"]),
+                                      )
+                                      .toString()
+                                      .replaceAll(",00", ""),
+                                ),
                               ],
                             ),
                             Visibility(
@@ -150,35 +146,35 @@ class CashierSubOrderItem extends StatelessWidget {
                                 child: Chip(
                                   backgroundColor: Colors.grey[50],
                                   avatar: CircleAvatar(
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.edit,
-                                      color: Colors.white,
+                                      color: Colors.blue,
                                     ),
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.grey[200],
                                   ),
                                   label: Text(
                                     item["note"].toString(),
                                   ),
                                 ),
                               ),
-                              visible:
-                                  item["note"].toString().isNotEmpty && UtilPref.lastClick['title'] != item['title'],
+                              visible: item["note"].toString().isNotEmpty && UtilValue.lastClick["id"] != item["id"],
                             ),
                             Visibility(
-                              visible: UtilPref.lastClick['title'] == item['title'],
+                              visible: UtilValue.lastClick["id"] == item["id"],
                               child: InkWell(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: Chip(
                                     backgroundColor: Colors.white,
                                     avatar: CircleAvatar(
-                                        backgroundColor: Colors.blue[300],
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: Colors.white,
-                                        )),
+                                      backgroundColor: Colors.grey[200],
+                                      child: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
                                     label: item["note"].toString().isEmpty
-                                        ? SizedBox.shrink()
+                                        ? const SizedBox.shrink()
                                         : Text(item["note"].toString()),
                                   ),
                                 ),
@@ -202,20 +198,21 @@ class CashierSubOrderItem extends StatelessWidget {
   void dialogDeleteQty() {
     Get.dialog(
       AlertDialog(
-        title: Text("Delete Item"),
-        content: Text("Are you sure want to delete this item?"),
+        title: const Text("Delete Item"),
+        content: const Text("Are you sure want to delete this item?"),
         actions: [
           MaterialButton(
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
             onPressed: () {
               Get.back();
             },
           ),
           MaterialButton(
-            child: Text("Delete"),
+            child: const Text("Delete"),
             onPressed: () {
-              UtilPref.listorder.removeWhere((element) => element['title'] == item['title']);
-              UtilPref.listorderSet(value: List.from(UtilPref.listorder));
+              GVal.listOrders.value.val.removeWhere((element) => element["id"] == item["id"]);
+              GVal.listOrders.value.val = List.from(GVal.listOrders.value.val);
+              GVal.listOrders.refresh();
               Get.back();
             },
           ),
@@ -225,88 +222,79 @@ class CashierSubOrderItem extends StatelessWidget {
   }
 
   void reduceQty() {
-    final idx = UtilPref.listorder.indexWhere((element) => element['title'] == item['title']);
+    final idx = GVal.listOrders.value.val.indexWhere((element) => element["id"] == item["id"]);
     if (item['qty'] > 1) {
-      UtilPref.listorder[idx]['qty'] = UtilPref.listorder[idx]['qty'] - 1;
+      GVal.listOrders.value.val[idx]['qty'] = GVal.listOrders.value.val[idx]['qty'] - 1;
+      GVal.listOrders.refresh();
+
     } else {
       Get.dialog(
         AlertDialog(
-          title: Text("Delete Item"),
-          content: Text("Are you sure want to delete this item?"),
+          title: const Text("Delete Item"),
+          content: const Text("Are you sure want to delete this item?"),
           actions: [
             MaterialButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Get.back();
               },
             ),
             MaterialButton(
-              child: Text("Delete"),
+              child: const Text("Delete"),
               onPressed: () {
-                UtilPref.listorder.removeWhere((element) => element['title'] == item['title']);
-                UtilPref.listorderSet(value: List.from(UtilPref.listorder));
+                GVal.listOrders.value.val.removeWhere((element) => element["id"] == item["id"]);
+                GVal.listOrders.value.val = List.from(GVal.listOrders.value.val);
+                GVal.listOrders.refresh();
                 Get.back();
               },
             ),
           ],
         ),
       );
-      // UtilPref.listorder.removeWhere((element) => element['title'] == item['title']);
+      // UtilPref.listorder.removeWhere((element) => element["id"] == item["id"]);
     }
 
-    UtilPref.lastClick.value = item;
-    UtilPref.listorderSet(value: List.from(UtilPref.listorder));
+    UtilValue.lastClick.value = item;
+    GVal.listOrders.value.val = List.from(GVal.listOrders.value.val);
+    GVal.listOrders.refresh();
   }
 
-  void addQty() {
-    final idx = UtilPref.listorder.indexWhere((element) => element['title'] == item['title']);
-    if (idx == -1) {
-      item['qty'] = 1;
-      item['note'] = "";
-      UtilPref.listorder.add(item);
-    } else {
-      UtilPref.listorder[idx]['qty'] = UtilPref.listorder[idx]['qty'] + 1;
-    }
-
-    UtilPref.lastClick.value = item;
-    UtilPref.listorderSet(value: List.from(UtilPref.listorder));
-  }
+  
 
   void dialogNote(String note) {
     Get.dialog(
       anido.ElasticIn(
         child: AlertDialog(
-          title: Text(
+          title: const Text(
             "Add Some Note",
           ),
           content: TextFormField(
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.edit),
+              prefixIcon: const Icon(Icons.edit),
               labelText: "Note",
               fillColor: Colors.grey[50],
               filled: true,
-              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+              enabledBorder: const OutlineInputBorder(borderSide: BorderSide.none),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(28)),
             ),
             controller: TextEditingController(text: item['note']),
             onChanged: (value) {
               item['note'] = value;
-              UtilPref.listorderSet(value: List.from(UtilPref.listorder));
+              GVal.listOrders.value.val = List.from(GVal.listOrders.value.val);
+              GVal.listOrders.refresh();
             },
           ),
           actions: [
             MaterialButton(
-              child: Text("Clear"),
+              child: const Text("Clear"),
               onPressed: () {
                 item['note'] = "";
-                UtilPref.listorderSet();
-                UtilPref.listorder.refresh();
                 Get.back();
               },
             ),
             MaterialButton(
               color: Colors.green,
-              child: Text(
+              child: const Text(
                 "OK",
                 style: TextStyle(color: Colors.white),
               ),

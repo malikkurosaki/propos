@@ -1,18 +1,20 @@
+import 'package:client/cashiers/cashier_page_payment_finish.dart';
 import 'package:client/customer_page.dart';
 import 'package:client/homes/home_page.dart';
+import 'package:client/payment_metod/payment_method_page.dart';
 import 'package:client/root_page.dart';
 import 'package:client/printer_page.dart';
-import 'package:client/profile_page.dart';
+import 'package:client/profiles/profile_page.dart';
 import 'package:client/setting_page.dart';
 import 'package:get/route_manager.dart';
 import '../cashiers/cashier_page.dart';
 import '../cashiers/cashier_page_payment.dart';
 import '../categories/category_page.dart';
 import '../dev_page.dart';
-import '../employee_page.dart';
+import '../employees/employee_page.dart';
 import '../outlets/outlet_page.dart';
-import '../profile_edit.dart';
-import '../login_page.dart';
+import '../profiles/profile_edit.dart';
+import '../logins/login_page.dart';
 import '../register_page.dart';
 import '../products/product_page.dart';
 import '../wellcome_page.dart';
@@ -40,27 +42,40 @@ class UtilRoutes {
   UtilRoutes.employeePage() : key = '/employeePage';
   UtilRoutes.settingPage() : key = '/settingPage';
   UtilRoutes.customerPage() : key = '/customerPage';
+
+  // payment finish
+  UtilRoutes.paymentFinish() : key = '/paymentFinish';
+
+  // payment method page
+  UtilRoutes.paymentMethodPage() : key = '/paymentMethodPage';
+
   UtilRoutes.devPage() : key = '/devPage';
 
   static final listPage = <GetPage>[
-    GetPage(name: UtilRoutes.root().key, page: () => RootPage()),
+    GetPage(name: UtilRoutes.root().key, page: () => const RootPage()),
     GetPage(name: UtilRoutes.home().key, page: () => HomePage()),
     GetPage(name: UtilRoutes.login().key, page: () => LoginPage()),
     GetPage(name: UtilRoutes.register().key, page: () => RegisterPage()),
-    GetPage(name: UtilRoutes.profile().key, page: () => ProfilePage()),
-    GetPage(name: UtilRoutes.editProfile().key, page: () => ProfileEdit()),
-    GetPage(name: UtilRoutes.wellcome().key, page: () => WellcomePage()),
-    GetPage(name: UtilRoutes.cashier().key, page: () => CashierPage()),
+    GetPage(name: UtilRoutes.profile().key, page: () => const ProfilePage()),
+    GetPage(name: UtilRoutes.editProfile().key, page: () => const ProfileEdit()),
+    GetPage(name: UtilRoutes.wellcome().key, page: () => const WellcomePage()),
+    GetPage(name: UtilRoutes.cashier().key, page: () => const CashierPage()),
     GetPage(name: UtilRoutes.cashierPayment().key, page: () => CashierPagePayment()),
-    GetPage(name: UtilRoutes.transaction().key, page: () => TransactionPage()),
-    GetPage(name: UtilRoutes.productPage().key, page: () => ProductPage()),
-    GetPage(name: UtilRoutes.categoryPage().key, page: () => CategoryPage()),
-    GetPage(name: UtilRoutes.printerPage().key, page: () => PrinterPage()),
-    GetPage(name: UtilRoutes.outletPage().key, page: () => OutletPage()),
+    GetPage(name: UtilRoutes.transaction().key, page: () => const TransactionPage()),
+    GetPage(name: UtilRoutes.productPage().key, page: () => const ProductPage()),
+    GetPage(name: UtilRoutes.categoryPage().key, page: () => const CategoryPage()),
+    GetPage(name: UtilRoutes.printerPage().key, page: () => const PrinterPage()),
+    GetPage(name: UtilRoutes.outletPage().key, page: () => const OutletPage()),
     GetPage(name: UtilRoutes.employeePage().key, page: () => EmployeePage()),
-    GetPage(name: UtilRoutes.settingPage().key, page: () => SettingPage()),
-    GetPage(name: UtilRoutes.customerPage().key, page: () => CustomerPage()),
-    GetPage(name: UtilRoutes.devPage().key, page: () => DevPage()),
+    GetPage(name: UtilRoutes.settingPage().key, page: () => const SettingPage()),
+    GetPage(name: UtilRoutes.customerPage().key, page: () => const CustomerPage()),
+
+    // payment method page
+    GetPage(name: UtilRoutes.paymentMethodPage().key, page: () => const PaymentMethodPage()),
+    GetPage(name: UtilRoutes.devPage().key, page: () => const DevPage()),
+
+    // payment finish
+    GetPage(name: UtilRoutes.paymentFinish().key, page: () => const CashierPagePaymentFinish()),
   ];
 
   go() => Get.toNamed(key);

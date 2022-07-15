@@ -8,6 +8,7 @@ const fs = require('fs');
 // multer upload image
 const multer = require('multer');
 const { Logout } = require('./controller/logout');
+const { PaymentMethodRouter } = require('./controller/payment_methods');
 
 
 const storage = multer.diskStorage({
@@ -76,12 +77,8 @@ api.post('/upload', multer({ storage: storage }).single('image'), (req, res) => 
 // logout
 api.delete('/logout', Logout)
 
-
 api.get('/', (req, res) => {
     res.type('html').send('<center><h1>PROPOS SERVER API</h1></center>');
 })
-
-
-
 
 module.exports = { api }

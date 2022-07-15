@@ -1,7 +1,7 @@
 import 'package:client/comps/comp_app_bar.dart';
 import 'package:client/products/product_create.dart';
-import 'package:client/products/product_table.dart';
-import 'package:client/utils/util_pref.dart';
+import 'package:client/products/product_list.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:client/utils/util_routers.dart';
 import 'package:client/utils/util_val.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +15,9 @@ class ProductPage extends StatelessWidget {
   // final indexSub = 0.obs;
 
   _onLoad(){
-    UtilLoad.category();
-    UtilLoad.outlet();
-    UtilLoad.product();
+    UtilLoad.loadCategory();
+    UtilLoad.loadOutlet();
+    UtilLoad.loadProduct();
   }
 
   @override
@@ -31,6 +31,7 @@ class ProductPage extends StatelessWidget {
             children: [
               CompAppBar(
                 title: "product",
+                onBack: () => UtilRoutes.home().go(),
                 surfix: Align(
                   alignment: Alignment.bottomRight,
                   child: Visibility(
@@ -40,9 +41,9 @@ class ProductPage extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         onPressed: () {
-                          UtilLoad.product(isAler: true);
+                          UtilLoad.loadProduct(isAler: true);
                         },
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                       ),
                     ),
                   ),
@@ -64,17 +65,17 @@ class ProductPage extends StatelessWidget {
                                   () => ListView(
                                     children: [
                                       Ink(
-                                        color: UtilPref.indexProductPage.value == 0 ? Colors.grey[100] : Colors.transparent,
+                                        color: UtilValue.indexProductPage.value == 0 ? Colors.grey[100] : Colors.transparent,
                                         child: ListTile(
-                                          onTap: () => UtilPref.indexProductPageSet(value: 0),
-                                          title: Text("Products"),
+                                          onTap: () => UtilValue.indexProductPageSet(value: 0),
+                                          title: const Text("Products"),
                                         ),
                                       ),
                                       Ink(
-                                        color: UtilPref.indexProductPage.value == 1 ? Colors.grey[100] : Colors.transparent,
+                                        color: UtilValue.indexProductPage.value == 1 ? Colors.grey[100] : Colors.transparent,
                                         child: ListTile(
-                                          onTap: () => UtilPref.indexProductPageSet(value: 1),
-                                          title: Text("Product Create"),
+                                          onTap: () => UtilValue.indexProductPageSet(value: 1),
+                                          title: const Text("Product Create"),
                                         ),
                                       ),
                                     ],
@@ -90,9 +91,9 @@ class ProductPage extends StatelessWidget {
                       child: Obx(
                         () => IndexedStack(
                           alignment: Alignment.topLeft,
-                          index: UtilPref.indexProductPage.value,
+                          index: UtilValue.indexProductPage.value,
                           children: [
-                            ProductTable(),
+                            const ProductList(),
                             ProductCreate(),
                           ],
                         ),

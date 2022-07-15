@@ -6,7 +6,7 @@ class CompLogout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      child: Text("Logout"),
+      child: const Text("Logout"),
       onPressed: () {
         
       },

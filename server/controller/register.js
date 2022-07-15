@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 const Register = asyncHandler(async (req, res) => {
     let data = req.body;
-    let device = JSON.parse(data.device);
+    // let device = JSON.parse(data.device);
     try {
 
         let user = await prisma.users.create({
@@ -28,17 +28,17 @@ const Register = asyncHandler(async (req, res) => {
             }
         })
 
-        const perangkat = await prisma.devices.create({
-            data: {
-                model: device.model,
-                version: device.version,
-                manufacturer: device.manufacturer,
-                brand: device.brand,
-                device: device.device,
-                usersId: user.id,
-                outletsId: outlet.id,
-            }
-        })
+        // const perangkat = await prisma.devices.create({
+        //     data: {
+        //         model: device.model,
+        //         version: device.version,
+        //         manufacturer: device.manufacturer,
+        //         brand: device.brand,
+        //         device: device.device,
+        //         usersId: user.id,
+        //         outletsId: outlet.id,
+        //     }
+        // })
 
         res.json({
             success: true,

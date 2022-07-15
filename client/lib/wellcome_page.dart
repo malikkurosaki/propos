@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'utils/util_pref.dart';
+import 'utils/util_value.dart';
 import 'utils/util_routers.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +39,7 @@ class WellcomePage extends StatelessWidget {
 
   _onload()async{
     await 0.1.delay();
-    UtilPref.wellcomeSet(false);
+    UtilValue.wellcomeSet(false);
     UtilRoutes.root().goOff();
   }
 
@@ -47,7 +47,7 @@ class WellcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     _onload();
     return ResponsiveBuilder(
-      builder: (a, b) => SafeArea(
+      builder: (a, b) => const SafeArea(
         child: Center(
           child: Text("loading"),
         )

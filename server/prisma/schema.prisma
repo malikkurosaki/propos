@@ -5,25 +5,34 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Users {
-  id         String       @id @default(cuid())
-  name       String
-  email      String       @unique
-  password   String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Profiles   Profiles?
-  Outlets    Outlets[]
-  ListBill   ListBill[]
-  Employees  Employees[]
-  Tokens     Tokens[]
-  Categories Categories[]
-  Devices    Devices[]
+  id             String           @id @default(cuid())
+  name           String
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Role           Roles?           @relation(fields: [rolesId], references: [id])
+  Profiles       Profiles?
+  Outlets        Outlets[]
+  ListBill       ListBill[]
+  Employees      Employees[]
+  Tokens         Tokens[]
+  Categories     Categories[]
+  Devices        Devices[]
+  PaymentMethods PaymentMethods[]
+  Customers      Customers[]
+  Bills          Bills[]
+  rolesId        String?
 }
 
 model Profiles {
@@ -35,45 +44,39 @@ model Profiles {
   state     String?
   zip       String?
   phone     String?
-  Users     Users?   @relation(fields: [usersId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Users     Users?   @relation(fields: [usersId], references: [id])
   usersId   String?  @unique
 }
 
 model Roles {
   id        String      @id @default(cuid())
-  rolesId   Int         @unique
   name      String
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  Users     Users[]
   Employees Employees[]
 }
 
 model Employees {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
+  pin       String     @unique
   name      String
   address   String?
-  city      String?
-  state     String?
-  zip       String?
   phone     String?
   email     String
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Roles     Roles?   @relation(fields: [rolesId], references: [rolesId])
-  rolesId   Int      @default(3)
-  User      Users?   @relation(fields: [usersId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  User      Users?     @relation(fields: [usersId], references: [id])
   usersId   String?
+  ListBill  ListBill[]
+  Roles     Roles?     @relation(fields: [rolesId], references: [id])
+  outletsId String?
+  rolesId   String?
+  Outlets   Outlets?   @relation(fields: [outletsId], references: [id])
 }
-
-// info['id'] = id;
-// info['model'] = androidInfo.model;
-// info['version'] = androidInfo.version.release;
-// info['manufacturer'] = androidInfo.manufacturer;
-// info['brand'] = androidInfo.brand;
-// info['device'] = androidInfo.id;
 
 model Devices {
   id           String   @id @default(cuid())
@@ -83,13 +86,13 @@ model Devices {
   manufacturer String?
   brand        String?
   device       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   Users        Users?   @relation(fields: [usersId], references: [id])
   usersId      String?
   Outltets     Outlets? @relation(fields: [outletsId], references: [id])
   outletsId    String?
   Tokens       Tokens[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
 }
 
 model Outlets {
@@ -98,34 +101,40 @@ model Outlets {
   description String?
   address     String?
   phone       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   Users       Users?       @relation(fields: [usersId], references: [id])
   usersId     String?
   Categories  Categories[]
   Products    Products[]
   Devices     Devices[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  Customers   Customers[]
+  ListBill    ListBill[]
+  Employees   Employees[]
 }
 
 model Categories {
   id          String     @id @default(cuid())
   name        String
   description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   Products    Products[]
   Outlets     Outlets?   @relation(fields: [outletsId], references: [id])
   outletsId   String?
   User        Users?     @relation(fields: [usersId], references: [id])
   usersId     String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  Bills       Bills[]
 }
 
 model Products {
   id           String         @id @default(cuid())
-  name         String
+  name         String         @db.Text
   price        Float
   description  String?
   usersId      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   Categories   Categories?    @relation(fields: [categoriesId], references: [id])
   categoriesId String?
   Outlets      Outlets?       @relation(fields: [outletsId], references: [id])
@@ -134,17 +143,15 @@ model Products {
   Images       Images?
   Stocks       Stocks?
   outletsId    String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
 }
 
 model Images {
   id         String    @id @default(cuid())
   url        String    @default("")
-  Product    Products? @relation(fields: [productsId], references: [id])
-  productsId String?   @unique
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  Product    Products? @relation(fields: [productsId], references: [id])
+  productsId String?   @unique
 }
 
 model Stocks {
@@ -152,9 +159,9 @@ model Stocks {
   quantity    Int       @default(0)
   minQuantity Int       @default(1)
   description String?
+  productsId  String?   @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  productsId  String?   @unique
   Products    Products? @relation(fields: [productsId], references: [id])
 }
 
@@ -167,61 +174,103 @@ model CustomPrices {
   updatedAt   DateTime  @updatedAt
   Product     Products? @relation(fields: [productsId], references: [id])
   productsId  String?
-
 }
 
 /// billId berisi id dari generate bill
 model ListBill {
-  id          String     @id @default(cuid())
-  billsId     String     @unique
-  totalQty    Int
-  totalItems  Int
-  totalPrice  Float
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Users       Users?     @relation(fields: [usersId], references: [id])
-  usersId     String?
+  id               String          @id @default(cuid())
+  transactionId    String
+  totalQty         Int
+  totalItems       Int
+  totalPrice       Float
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  Users            Users?          @relation(fields: [usersId], references: [id])
+  usersId          String?
+  BillTypes        BillTypes?      @relation(fields: [billTypesId], references: [id])
+  billTypesId      String?
+  pax              Int?
+  Customers        Customers?      @relation(fields: [customersId], references: [id])
+  customersId      String?
+  PaymentMethods   PaymentMethods? @relation(fields: [paymentMethodsId], references: [id])
+  paymentMethodsId String?
+  Outlets          Outlets?        @relation(fields: [outletsId], references: [id])
+  outletsId        String?
+  Employees        Employees?      @relation(fields: [employeesId], references: [id])
+  employeesId      String?
+  Bills            Bills[]
+}
+
+model Bills {
+  id            String      @id @default(cuid())
+  transactionId String
+  ListBill      ListBill?   @relation(fields: [listBillId], references: [id])
+  listBillId    String?
+  Products      Products?   @relation(fields: [productsId], references: [id])
+  productsId    String?
+  Discounts     Discounts?  @relation(fields: [discountsId], references: [id])
+  discountsId   String?
+  Taxes         Taxes?      @relation(fields: [taxesId], references: [id])
+  taxesId       String?
+  Category      Categories? @relation(fields: [categoriesId], references: [id])
+  categoriesId  String?
+  qty           Int?
+  totalPrice    Float?
+  note          String?
+  User          Users?      @relation(fields: [usersId], references: [id])
+  usersId       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Discounts {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  value       Float
+  enabled     Boolean  @default(true)
   Bills       Bills[]
-  BillTypes   BillTypes? @relation(fields: [billTypesId], references: [id])
-  billTypesId String?
-  pax         Int?
-  Customers   Customers? @relation(fields: [customersId], references: [id])
-  customersId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Taxes {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  value       Float
+  enabled     Boolean  @default(true)
+  Bills       Bills[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Customers {
-  id        String     @id @default(cuid())
-  name      String
-  address   String?
-  city      String?
-  state     String?
-  zip       String?
-  phone     String?
-  email     String?
+  id      String  @id @default(cuid())
+  name    String
+  address String?
+  city    String?
+  state   String?
+  zip     String?
+  phone   String?
+  email   String?
+
+  ListBill  ListBill[]
+  Users     Users?     @relation(fields: [usersId], references: [id])
+  usersId   String?
+  Outlets   Outlets?   @relation(fields: [outletsId], references: [id])
+  outletsId String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  ListBill  ListBill[]
 }
 
 /// The schema allows the following query:
 model BillTypes {
   id        String     @id @default(cuid())
   name      String
+  ListBill  ListBill[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  ListBill  ListBill[]
-
-}
-
-model Bills {
-  id         String    @id @default(cuid())
-  name       String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  ListBill   ListBill? @relation(fields: [listBillId], references: [id])
-  listBillId String?
-  Products   Products? @relation(fields: [productsId], references: [id])
-  productsId String?
 
 }
 
@@ -236,4 +285,25 @@ model Tokens {
   expiresAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+// payment method
+model PaymentMethods {
+  id        String     @id @default(uuid())
+  name      String
+  isEnable  Boolean    @default(true)
+  Users     Users?     @relation(fields: [usersId], references: [id])
+  ListBill  ListBill[]
+  usersId   String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+}
+
+// master payment method
+model MasterPaymentMethods {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

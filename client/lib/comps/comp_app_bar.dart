@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../utils/util_routers.dart';
 
 class CompAppBar extends StatelessWidget {
-  const CompAppBar({Key? key, this.title, this.surfix}) : super(key: key);
+  const CompAppBar({Key? key, this.title = "masukkan nama title", this.surfix, this.onBack}) : super(key: key);
   final String? title;
   final Widget? surfix;
+  // final bool? isback;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: Colors.white,
             child: BackButton(
-              onPressed: () => UtilRoutes.home().go(),
+              onPressed: () => onBack == null? Get.back(): onBack!()
             ),
           ),
           Padding(
@@ -28,9 +30,7 @@ class CompAppBar extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: surfix.toString() == "null" 
-            ? Container() : surfix!),
+          Expanded(child: surfix.toString() == "null" ? Container() : surfix!),
         ],
       ),
     );

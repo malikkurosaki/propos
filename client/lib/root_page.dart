@@ -1,4 +1,5 @@
-import 'package:client/utils/util_pref.dart';
+import 'package:client/utils/g_val.dart';
+import 'package:client/utils/util_value.dart';
 import 'package:client/utils/util_routers.dart';
 import 'package:client/utils/util_val.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,14 @@ class RootPage extends StatelessWidget {
       builder: (context, sizingInformation) {
         UtilVal.isMobile.value = sizingInformation.isMobile;
         return Material(
-          child: Stack(
-            children: [
-              SizedBox.expand(
-                child: Image.asset(
-                  'assets/images/land.png',
-                  fit: BoxFit.cover,
-                ),
-              )
-            ],
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         );
       },
@@ -33,12 +33,12 @@ class RootPage extends StatelessWidget {
   onLoad() async {
     await 0.01.delay();
 
-    if (UtilPref.wellcome.value == "true") {
+    if (UtilValue.wellcome.value == "true") {
       UtilRoutes.wellcome().goOff();
       return;
     }
 
-    if (UtilPref.user.isEmpty) {
+    if (GVal.user.value.val.isEmpty) {
       UtilRoutes.login().goOff();
       return;
     }

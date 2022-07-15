@@ -1,13 +1,15 @@
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_routers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../utils/util_pref.dart';
+import 'package:intl/intl.dart';
+import '../utils/util_value.dart';
 
 class CashierPagePaymentFinish extends StatelessWidget {
-  final String? paymentValue;
-  final int? change;
-  final int? haveToPay;
-  const CashierPagePaymentFinish({this.paymentValue, this.change, this.haveToPay, Key? key}) : super(key: key);
+  // final String? paymentValue;
+  // final int? change;
+  // final int? haveToPay;
+  const CashierPagePaymentFinish({ Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +18,13 @@ class CashierPagePaymentFinish extends StatelessWidget {
         child: Center(
           child: Container(
             color: Colors.grey[100],
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             width: 500,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(24),
+                const Padding(
+                  padding: EdgeInsets.all(24),
                   child: Center(
                       child: Text(
                     "Success",
@@ -35,26 +37,26 @@ class CashierPagePaymentFinish extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Transaction ID : ${UtilPref.billId.value}",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
+                        "Transaction ID : ${GVal.transactionId.value.val}",
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
-                      Divider(),
+                      const Divider(),
                       Text(
-                        "Payment : ${paymentValue}",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
+                        "Payment : "+ NumberFormat.currency(locale: 'id_ID', symbol: "", decimalDigits: 0).format(int.parse(GVal.payValue.value.val.toString())),
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
-                      Divider(),
+                      const Divider(),
                       Text(
-                        "Have to pay : $haveToPay",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
+                        "Have to pay : "+ NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(GVal.haveToPay.value.val),
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
-                change == 0
-                    ? SizedBox.shrink()
+                GVal.changeValue.value.val == 0
+                    ? const SizedBox.shrink()
                     : Card(
-                        margin: EdgeInsets.only(top: 50),
+                        margin: const EdgeInsets.only(top: 50),
                         color: Colors.brown[50],
                         child: Padding(
                           padding: const EdgeInsets.all(24),
@@ -68,8 +70,8 @@ class CashierPagePaymentFinish extends StatelessWidget {
                                 ),
                                 Center(
                                   child: Text(
-                                    "${change}",
-                                    style: TextStyle(fontSize: 53, fontWeight: FontWeight.bold, color: Colors.cyan),
+                                    NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(GVal.changeValue.value.val),
+                                    style: const TextStyle(fontSize: 53, fontWeight: FontWeight.bold, color: Colors.cyan),
                                   ),
                                 ),
                               ],
@@ -77,11 +79,11 @@ class CashierPagePaymentFinish extends StatelessWidget {
                           ),
                         ),
                       ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -90,7 +92,7 @@ class CashierPagePaymentFinish extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.cyan[200],
                           radius: 50,
-                          child: Icon(
+                          child: const Icon(
                             Icons.print,
                             color: Colors.white,
                             size: 50,
@@ -102,7 +104,7 @@ class CashierPagePaymentFinish extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.red[200],
                           radius: 50,
-                          child: Icon(
+                          child: const Icon(
                             Icons.email,
                             color: Colors.white,
                             size: 50,
@@ -114,7 +116,7 @@ class CashierPagePaymentFinish extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.green[200],
                           radius: 50,
-                          child: Icon(
+                          child: const Icon(
                             Icons.whatsapp,
                             color: Colors.white,
                             size: 50,
@@ -127,8 +129,8 @@ class CashierPagePaymentFinish extends StatelessWidget {
                 MaterialButton(
                   color: Colors.green,
                   child: Container(
-                    padding: EdgeInsets.all(16),
-                    child: Center(
+                    padding: const EdgeInsets.all(16),
+                    child: const Center(
                       child: Text(
                         "OK",
                         style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),

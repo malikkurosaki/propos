@@ -1,42 +1,15 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const log = require('c-log')
+const { SeedCategory } = require("./seed_category");
+const { SeedEmployee } = require("./seed_employee");
+const { SeedPaymentMethod } = require("./seed_mater_payment_method");
+const { SeedBreactfast } = require("./seed_product");
+const { SeedRole } = require("./seed_role");
+const { Seeduser } = require("./seed_user");
 
-
-const roles = [
-    {
-        id: 1,
-        name: 'owner'
-    },
-    {
-        id: 2,
-        name: 'admin'
-    },
-    {
-        id: 3,
-        name: 'employee'
-    },
-    {
-        id: 4,
-        name: 'developer'
-    }
-
-]
-
-async function seed() {
-    await prisma.roles.deleteMany();
-
-    for (let role of roles) {
-        await prisma.roles.create({
-            data: {
-                rolesId: Number(role.id),
-                name: role.name
-            }
-        })
-    }
-
-    log.table(await prisma.roles.findMany())
-
-}
-
-seed()
+(async x => {
+    await SeedRole();
+    await Seeduser();
+    await SeedCategory();
+    await SeedPaymentMethod();
+    await SeedBreactfast();
+    await SeedEmployee()
+})();

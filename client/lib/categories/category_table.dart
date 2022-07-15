@@ -1,12 +1,13 @@
 // category table
 import 'dart:convert';
 
+import 'package:client/utils/g_val.dart';
 import 'package:client/utils/util_http.dart';
 import 'package:client/utils/util_load.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import '../utils/util_pref.dart';
+import '../utils/util_value.dart';
 import '../utils/util_val.dart';
 
 class CategoryTable extends StatelessWidget {
@@ -42,14 +43,14 @@ class CategoryTable extends StatelessWidget {
                     DataColumn(label: Text("action")),
                   ],
                   rows: [
-                    for (var category in UtilPref.categories)
+                    for (var category in GVal.categories.value.val)
                       DataRow(
                         cells: [
                           // DataCell(
                           //   Text(category["id"].toString()),
                           // ),
                           DataCell(
-                            Text((UtilPref.categories.indexOf(category) + 1).toString()),
+                            Text((GVal.categories.value.val.indexOf(category) + 1).toString()),
                           ),
                           DataCell(
                             Text(category["name"].toString()),
@@ -61,7 +62,7 @@ class CategoryTable extends StatelessWidget {
                             Row(
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.orange,),
+                                  icon: const Icon(Icons.edit, color: Colors.orange,),
                                   onPressed: () {
                                     _titleController.text = category['name'];
                                     _descriptionController.text = category['description'];
@@ -76,14 +77,14 @@ class CategoryTable extends StatelessWidget {
                                               // title
                                               TextField(
                                                 controller: _titleController,
-                                                decoration: InputDecoration(
+                                                decoration: const InputDecoration(
                                                   labelText: "Title",
                                                 ),
                                               ),
                                               // description
                                               TextField(
                                                 controller: _descriptionController,
-                                                decoration: InputDecoration(
+                                                decoration: const InputDecoration(
                                                   labelText: "Description",
                                                 ),
                                               ),
@@ -94,12 +95,12 @@ class CategoryTable extends StatelessWidget {
                                           // no
                                           MaterialButton(
                                             onPressed: () => Get.back(),
-                                            child: Text("NO"),
+                                            child: const Text("NO"),
                                           ),
                                           // yes
                                           MaterialButton(
                                             color: Colors.blue,
-                                            child: Text(
+                                            child: const Text(
                                               "Save",
                                               style: TextStyle(color: Colors.white),
                                             ),
@@ -115,15 +116,15 @@ class CategoryTable extends StatelessWidget {
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.pink,),
+                                  icon: const Icon(Icons.delete, color: Colors.pink,),
                                   onPressed: () {
                                     Get.dialog(
                                       AlertDialog(
-                                        title: Text("Delete "),
+                                        title: const Text("Delete "),
                                         actions: [
                                           MaterialButton(
                                             onPressed: () => Get.back(),
-                                            child: Text("No"),
+                                            child: const Text("No"),
                                           ),
                                           MaterialButton(
                                             onPressed: () async {
@@ -132,10 +133,10 @@ class CategoryTable extends StatelessWidget {
                                               if (hasil['success']) {
                                                 Get.back();
                                                 EasyLoading.showSuccess("Berhasil");
-                                                UtilLoad.category();
+                                                UtilLoad.loadCategory();
                                               }
                                             },
-                                            child: Text("Yes"),
+                                            child: const Text("Yes"),
                                           )
                                         ],
                                       ),
