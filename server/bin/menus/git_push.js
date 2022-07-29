@@ -15,9 +15,8 @@ const beautify = require('js-beautify').js_beautify;
 ; (async () => {
     // find current branch
     const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-
-    console.log(branch)
-
+    execSync(`git add . && git commit -m "auto commit" && git push origin ${branch}`, { stdio: 'inherit' , cwd: path.join(__dirname, '../../../')});
+    console.log('push success'.cyan);
 })();
 
 
