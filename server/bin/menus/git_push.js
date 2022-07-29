@@ -12,7 +12,13 @@ const prisma = new PrismaClient();
 const beautify = require('js-beautify').js_beautify;
 
 
-const branch = exec('git rev-parse --abbrev-ref HEAD').toString().trim();
+; (async () => {
+    // find current branch
+    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
-console.log(branch)
-execSync(`git add . && git commit -m "auto commit && git push"`);
+    console.log(branch)
+
+})();
+
+
+// execSync(`git add . && git commit -m "auto commit && git push"`);
