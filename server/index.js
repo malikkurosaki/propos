@@ -1,1 +1,2 @@
-console.log('server di server.js')
+require("./lib/main")();
+// disisni semuanya dimulai
